@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.scalpr.scalpr.SelectedConversationActivity">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvMessages"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/llMessageField"
+        android:paddingBottom="5dp"/>
+
+    <LinearLayout
+        android:id="@+id/llFailedToConnect"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:background="@android:color/transparent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/pbLoadingNewMessages" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Connecting..."
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/atlas_message_composer_background"
+        android:id="@+id/llMessageField">
+
+        <!--<ImageView-->
+            <!--android:id="@+id/attachment"-->
+            <!--style="?android:attr/borderlessButtonStyle"-->
+            <!--android:layout_width="@dimen/atlas_icon_button_size"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_marginLeft="@dimen/atlas_icon_button_side_padding"-->
+            <!--android:layout_marginRight="@dimen/atlas_icon_button_side_padding"-->
+            <!--android:scaleType="center"-->
+            <!--android:src="@drawable/ic_add_white_24dp"-->
+            <!--/>-->
+
+        <EditText
+            android:id="@+id/etMessageText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:hint="@string/atlas_message_composer_hint"
+            android:maxLines="3"
+            android:maxLength="500"
+            android:minHeight="@dimen/atlas_input_height"
+            android:textSize="@dimen/atlas_text_size_input"
+            android:textCursorDrawable="@drawable/atlas_edit_text_cursor"
+            />
+
+        <Button
+            android:id="@+id/bSendMessage"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/atlas_icon_button_side_padding"
+            android:layout_marginRight="@dimen/atlas_icon_button_side_padding"
+            android:text="@string/atlas_message_composer_send_button"
+            android:textSize="@dimen/atlas_text_size_button"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

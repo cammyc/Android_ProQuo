@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <item
+                android:id="@+id/nav_my_tickets"
+                android:icon="@drawable/ic_my_tickets"
+                android:title="My Tickets" />
+
+            <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/ic_search_black"
+            android:title="Search Tickets" />
+
+            <item
+                android:id="@+id/nav_messages"
+                android:icon="@android:drawable/sym_action_chat"
+                android:title="Messages" />
+
+            <item
+                android:id="@+id/nav_post_ticket"
+                android:icon="@drawable/ic_post_ticket"
+                android:title="Post Ticket" />
+
+
+            <item
+            android:id="@+id/nav_account_settings"
+            android:icon="@drawable/ic_profile_black"
+            android:title="Edit Profile" />
+
+            <item
+                android:id="@+id/nav_log_out"
+                android:icon="@drawable/ic_log_out"
+                android:title="Log Out" />
+
+            <item
+                android:id="@+id/nav_contact_us"
+                android:icon="@drawable/ic_mail_black_24dp"
+                android:title="Contact Us" />
+
+</menu>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:minWidth="300dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFF"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvIwDate"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:text="Date"
+            android:textColor="#FFF"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+
+
+
+
+
+                <TextView
+                    android:id="@+id/tvIwAttractionName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/colorAsphault"
+                    android:textSize="18dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvIwVenueName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16dp" />
+
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="5dp"
+                android:id="@+id/ivIwImage"
+                android:layout_gravity="center_horizontal" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/snippet1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tickets: "
+                    android:textColor="@color/colorAsphault"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvIwNumTickets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAsphault"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/snippet3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price: "
+                    android:textColor="@color/colorAsphault"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvIwPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAsphault"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvIwDescriptionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text=""
+                    android:textColor="@color/colorAsphault"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/bContactSeller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="CONTACT SELLER"
+                android:textColor="@color/colorAccent"
+                android:background="#FFF"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <!--<TextView-->
+            <!--android:id="@+id/tvIwSellerName"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:background="@color/colorAsphault"-->
+            <!--android:gravity="center"-->
+            <!--android:text="JOHN SMITH"-->
+            <!--android:textColor="#FFF"-->
+            <!--android:textSize="18dp"-->
+            <!--android:textStyle="bold" />-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:orientation="vertical">-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:id="@+id/snippet5"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:text="Phone #: "&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:textColor="@color/colorAsphault"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:textSize="18sp" />&ndash;&gt;-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/snippet6"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="444 444 4444"-->
+                    <!--android:textColor="@color/colorAsphault"-->
+                    <!--android:textSize="18sp"-->
+                    <!--android:textStyle="bold" />-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:id="@+id/snippet7"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:text="Email: "&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:textColor="@color/colorAsphault"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:textSize="18sp" />&ndash;&gt;-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/snippet8"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="john.smith@gmail.com"-->
+                    <!--android:textColor="@color/colorAsphault"-->
+                    <!--android:textSize="18sp"-->
+                    <!--android:textStyle="bold" />-->
+            <!--</LinearLayout>-->
+            <!---->
+
+            <!--</LinearLayout>-->
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_horizontal"
+        android:rotation="180"
+        android:src="@drawable/triangle" />
+
+</LinearLayout>

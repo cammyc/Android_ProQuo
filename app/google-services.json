@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "649639042384",
+    "project_id": "scalpr-143904"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649639042384:android:7b2f53b0aecbe93f",
+        "android_client_info": {
+          "package_name": "com.scalpr.scalpr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649639042384-cous7e8l0ke9fj4fol0gnd6qgt27sqrm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.scalpr.scalpr",
+            "certificate_hash": "B4992BB83A65B110406E3C4905FED12CE2DCB175"
+          }
+        },
+        {
+          "client_id": "649639042384-k7fruofd7prjqcma3lg6l7m4lgq04b53.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTdWruMNgtn_OBwVZtPXeTXwhroo2KIyE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

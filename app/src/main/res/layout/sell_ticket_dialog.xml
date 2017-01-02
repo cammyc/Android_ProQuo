@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:height="60dp"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:text="SELL TICKET"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#FFF"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/etAttractionName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Artist/Festival/Team"
+                android:textSize="14sp"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords"
+                android:maxLength="200" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/etVenueName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Venue Name"
+                android:textSize="14sp"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords"
+                android:maxLength="200" />
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <EditText
+                    android:id="@+id/etAttractionPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:ems="10"
+                    android:maxLength="4"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:hint="Ticket Price"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <EditText
+                    android:id="@+id/etAttractionNumberOfTickets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:hint="# of Tickets"
+                    android:imeOptions="actionNext"
+                    android:inputType="number" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/etAttractionDatePicker"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:ems="10"
+            android:textSize="14sp"
+            android:focusable="false"
+            android:gravity="center"
+            android:hint="Date" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/etAttractionDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:hint="Description"
+                android:textSize="14sp"
+                android:maxLength="140"
+                android:imeOptions="actionDone"
+                android:inputType="textCapSentences" />
+        </android.support.design.widget.TextInputLayout>
+        <!-- A RecyclerView with some commonly used attributes -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/my_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal" />
+
+        <ProgressBar
+            android:id="@+id/pbLoadAttractionImages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:indeterminate="false"
+            android:visibility="gone" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilMarkerImageSearchLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/etAttractionImageSearch"
+                android:layout_width="match_parent"
+                android:textSize="14sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:hint="Search Image"
+                android:imeOptions="actionDone"
+                android:inputType="text" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/ivSelectedImage"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/bDoneSellTicket"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/button_background_white"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        android:text="Set Sell Location" />
+
+</LinearLayout>

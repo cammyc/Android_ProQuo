@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@drawable/ic_profile_black"
+                android:title="Login" />
+            <item
+                android:id="@+id/nav_search"
+                android:icon="@drawable/ic_search_black"
+                android:title="Search Tickets" />
+
+            <item
+                android:id="@+id/nav_contact_us"
+                android:icon="@drawable/ic_mail_black_24dp"
+                android:title="Contact Us" />
+
+</menu>

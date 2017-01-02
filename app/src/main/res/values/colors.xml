@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2ecc71</color>
+    <color name="colorPrimaryDark">#2c3e50</color>
+    <color name="colorAccent">#2ecc71</color>
+    <color name="colorClouds">#ecf0f1</color>
+    <color name="colorAsphault">#34495e</color>
+    <color name="colorPeterRiver">#3498db</color>
+    <color name="colorNavPrimary">#10171d</color>
+    <color name="colorNavPrimaryDark">#3498db</color>
+    <color name="colorNavPrimaryLight">#1e2a37</color>
+    <color name="colorSilver">#bdc3c7</color>
+    <color name="atlas_view_divider">#FFE0E0E0</color>
+    <color name="colorAlazarin">#e74c3c</color>
+
+    <!--<color name="colorPrimaryDark">#303F9F</color>-->
+    <!--<color name="colorAccent">#FF4081</color>-->
+</resources>

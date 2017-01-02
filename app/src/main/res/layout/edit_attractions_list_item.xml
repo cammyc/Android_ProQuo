@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llEditAttractionListItem"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_gravity="center"
+    android:background="@drawable/button_background_white"
+    android:clickable="true"
+    android:descendantFocusability="beforeDescendants">
+
+    <LinearLayout
+        android:background="@drawable/button_background_white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <RelativeLayout
+        android:focusableInTouchMode="false"
+        android:focusable="false"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+
+        <ImageView
+            android:id="@+id/ivEditTicketPic"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp" />
+
+        <TextView
+            android:id="@+id/tvEditAttractionName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ivEditTicketPic"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/llButtonContainer"
+            android:layout_toRightOf="@+id/ivEditTicketPic"
+            android:text="tt"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#111"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvEditVenueName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/llButtonContainer"
+            android:layout_toRightOf="@+id/ivEditTicketPic"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="ss"
+            android:textColor="#333"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvEdtPriceAndTicketNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/ivEditTicketPic"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/llButtonContainer"
+            android:layout_toRightOf="@+id/ivEditTicketPic"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="pp"
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp" />
+
+
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="70dp"
+            android:id="@+id/llButtonContainer"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:id="@+id/llEditAttractionLocationButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/button_background_white">
+
+                    <ImageView
+                        android:id="@+id/ivEditAttractionLocation"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:focusable="false"
+                        android:background="@drawable/ic_pin_drop"
+                        android:layout_gravity="center"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llEditAttractionDetailsButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/button_background_white">
+
+                    <ImageView
+                        android:id="@+id/ivEditAttractionDetails"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:focusable="false"
+                        android:background="@drawable/ic_mode_edit"
+                        android:layout_gravity="center"/>
+
+                </LinearLayout>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

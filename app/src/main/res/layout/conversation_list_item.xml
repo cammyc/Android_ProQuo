@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+    android:id="@+id/llConversationListItem"
+    android:background="@drawable/button_background_white"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:layout_gravity="center"
+    android:clickable="true"
+    android:descendantFocusability="beforeDescendants"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <RelativeLayout
+            android:focusableInTouchMode="false"
+            android:focusable="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ivConvoListItemAttractionImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="New Text"
+                android:id="@+id/tvConvoLastMessageTimeStamp"
+                android:textColor="#333"
+                android:layout_alignTop="@+id/linearLayout"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/tvConvoLastMessageTimeStamp"
+                android:layout_toRightOf="@+id/ivConvoListItemAttractionImage"
+                android:id="@+id/linearLayout">
+
+                <TextView
+                    android:id="@+id/tvConvoTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="tt"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvConvoLastMessageText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="ss"
+                    android:textColor="#555"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </LinearLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvYourMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:gravity="center_vertical"
+        android:layout_marginRight="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:minHeight="38dp"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:textColorLink="#FFFFFF"
+        android:background="@drawable/button_background_grey_rounded"/>
+
+</LinearLayout>
