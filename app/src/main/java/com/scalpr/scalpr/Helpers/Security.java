@@ -1,6 +1,9 @@
 package com.scalpr.scalpr.Helpers;
 
+import android.content.Context;
 import android.util.Base64;
+
+import com.scalpr.scalpr.Objects.User;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -10,7 +13,19 @@ import javax.crypto.spec.SecretKeySpec;
  * Created by Cam on 10/29/2016.
  */
 public class Security {
-    public static String encrypt(String input, String key){
+
+    public static String getAccessToken(Context c){
+        UserHelper helper = new UserHelper(c);
+        User u = helper.getLoggedInUser();
+
+        if(u.getUserID() == 0){
+            return "";
+        }else{
+            return u.getAccessToken();
+        }
+    }
+
+    public static String encryptToken(String input, String key){
         byte[] crypted = null;
         try{
             SecretKeySpec skey = new SecretKeySpec(key.getBytes(), "AES");
@@ -23,7 +38,7 @@ public class Security {
         return new String(Base64.encode(crypted,Base64.DEFAULT));
     }
 
-    public static String decrypt(String input, String key){
+    public static String decryptToken(String input, String key){
         byte[] output = null;
         try{
             SecretKeySpec skey = new SecretKeySpec(key.getBytes(), "AES");

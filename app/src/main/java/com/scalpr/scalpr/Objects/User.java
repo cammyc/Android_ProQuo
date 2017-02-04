@@ -16,6 +16,11 @@ public class User implements Serializable{
     private String phone;
     private String password;
     private String displayPicURL;
+    private String accessToken;
+
+    public User (){
+        UserID = 0;
+    }
 
     public long getUserID() {
         return UserID;
@@ -71,5 +76,13 @@ public class User implements Serializable{
 
     public void setDisplayPicURL(String displayPicURL) {
         this.displayPicURL = displayPicURL;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }

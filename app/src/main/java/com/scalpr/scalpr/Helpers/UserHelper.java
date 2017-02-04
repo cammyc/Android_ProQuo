@@ -47,6 +47,7 @@ public class UserHelper {
         String phone = "";
         String password = "";
         String displayPicURL = "";
+        String accessToken = "";
 
         try{
             JSONObject jObject = new JSONObject(json);
@@ -57,6 +58,7 @@ public class UserHelper {
             phone = jObject.getString("phoneNumber");
             password = jObject.getString("password");
             displayPicURL = jObject.getString("displayPicURL");
+            accessToken = jObject.getString("accessToken");
 
         }catch (Exception ex){
             noError = false;
@@ -73,6 +75,7 @@ public class UserHelper {
             sharedPref.putString("phoneNumber",phone);
             sharedPref.putString("password",password);
             sharedPref.putString("displayPicURL",displayPicURL);
+            sharedPref.putString("accessToken", Security.encryptToken(accessToken, c.getResources().getString(R.string.key)));
             sharedPref.commit();
         }
     }
@@ -88,6 +91,7 @@ public class UserHelper {
             u.setPhone(jObject.getString("phoneNumber"));
             u.setPassword(jObject.getString("password"));
             u.setDisplayPicURL(jObject.getString("displayPicURL"));
+            u.setAccessToken(jObject.getString("accessToken"));
 
         }catch (Exception ex){
             Log.d("ERROR",ex.toString());
@@ -112,6 +116,7 @@ public class UserHelper {
         u.setEmail(sharedPref.getString("email",""));
         u.setPhone(sharedPref.getString("phoneNumber",""));
         u.setDisplayPicURL(sharedPref.getString("displayPicURL",""));
+        u.setAccessToken(Security.decryptToken(sharedPref.getString("accessToken",""),c.getResources().getString(R.string.key)));
         return u;
     }
 
@@ -173,7 +178,7 @@ public class UserHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -214,7 +219,7 @@ public class UserHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -252,7 +257,7 @@ public class UserHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -288,7 +293,7 @@ public class UserHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -352,7 +357,7 @@ public class UserHelper {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String,String> params = new HashMap<String, String>();
                     params.put("Content-Type","application/x-www-form-urlencoded");
-                    params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                    params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                     return params;
                 }
             };
@@ -392,7 +397,121 @@ public class UserHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
+                return params;
+            }
+        };
+        sr.setRetryPolicy(new DefaultRetryPolicy(
+                20000,
+                0,//DONT FUCK WITH THE REPEATING. DONT WANT ANY REPEAT OR THERE MAY BE REPETITION IN THE DATABASE OR IN THE APP. KEEP IT AT 0
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        queue.add(sr);
+    }
+
+    public void updateFirebaseLoginToken(final HttpResponseListener mPostCommentResponse, final String token, final long userID){
+        mPostCommentResponse.requestStarted();
+        RequestQueue queue = Volley.newRequestQueue(c);
+        StringRequest sr = new StringRequest(Request.Method.POST,"https://scalpr-143904.appspot.com/scalpr_ws/update_AndroidDeviceToken.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mPostCommentResponse.requestCompleted(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mPostCommentResponse.requestEndedWithError(error);
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("deviceToken", token);
+                params.put("userID", userID + "");
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
+                return params;
+            }
+        };
+        sr.setRetryPolicy(new DefaultRetryPolicy(
+                20000,
+                0,//DONT FUCK WITH THE REPEATING. DONT WANT ANY REPEAT OR THERE MAY BE REPETITION IN THE DATABASE OR IN THE APP. KEEP IT AT 0
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        queue.add(sr);
+    }
+
+    public String getFirebaseToken(){
+        SharedPreferences sharedPref = c.getSharedPreferences(c.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        return sharedPref.getString("deviceToken", null);
+    }
+
+    public void saveFirebaseToken(String token){
+        SharedPreferences.Editor sharedPrefEdit = c.getSharedPreferences(c.getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit();
+        sharedPrefEdit.putString("deviceToken", token);
+        sharedPrefEdit.commit();
+    }
+
+    public void updateTokenIfNecessary(final String token, long userID){
+
+            HttpResponseListener listener = new HttpResponseListener() {
+                @Override
+                public void requestStarted() {
+
+                }
+
+                @Override
+                public void requestCompleted(String response) {
+                    Log.d("response", response);
+                    if(!response.equals("-1")){
+                       saveFirebaseToken(token);
+                    }
+                }
+
+                @Override
+                public void requestEndedWithError(VolleyError error) {
+
+                }
+            };
+
+            UserHelper userHelper = new UserHelper(c);
+            userHelper.updateFirebaseLoginToken(listener, token, userHelper.getLoggedInUser().getUserID());
+
+    }
+
+
+    public void removeFirebaseLoginToken(final HttpResponseListener mPostCommentResponse, final String token){
+        mPostCommentResponse.requestStarted();
+        RequestQueue queue = Volley.newRequestQueue(c);
+        StringRequest sr = new StringRequest(Request.Method.POST,"https://scalpr-143904.appspot.com/scalpr_ws/remove_AndroidDeviceToken.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mPostCommentResponse.requestCompleted(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mPostCommentResponse.requestEndedWithError(error);
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("deviceToken", token);
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -433,7 +552,7 @@ public class UserHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -444,7 +563,8 @@ public class UserHelper {
         queue.add(sr);
     }
 
-    public void LoginRequest(final HttpResponseListener mHttpLoginRequestResponse, final String emailPhone, final String password, final boolean retrieveUserInfo){
+
+    public void LoginRequest(final HttpResponseListener mHttpLoginRequestResponse, final String emailPhone, final String password){
         mHttpLoginRequestResponse.requestStarted();
         RequestQueue queue = Volley.newRequestQueue(c);
         StringRequest sr = new StringRequest(Request.Method.POST,"https://scalpr-143904.appspot.com/scalpr_ws/login_check.php", new Response.Listener<String>() {
@@ -463,7 +583,6 @@ public class UserHelper {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("emailPhone", emailPhone);
                 params.put("password",password);
-                params.put("retrieveUserInfo", String.valueOf(retrieveUserInfo));
                 return params;
             }
 
@@ -471,7 +590,7 @@ public class UserHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };

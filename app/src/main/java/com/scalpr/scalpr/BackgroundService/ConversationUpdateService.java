@@ -172,32 +172,32 @@ public class ConversationUpdateService extends GcmTaskService {
     }
 
     public static void scheduleRepeat(Context context) {
-        //in this method, single Repeating task is scheduled (the target service that will be called is ConversationUpdateService.class)
-        try {
-            PeriodicTask periodic = new PeriodicTask.Builder()
-                    //specify target service - must extend GcmTaskService
-                    .setService(ConversationUpdateService.class)
-                    //repeat every 10 seconds
-                    .setPeriod(10)
-                    //specify how much earlier the task can be executed (in seconds)
-                    .setFlex(10)
-                    //tag that is unique to this task (can be used to cancel task)
-                    .setTag(GCM_REPEAT_TAG)
-                    //whether the task persists after device reboot
-                    .setPersisted(true)
-                    //if another task with same tag is already scheduled, replace it with this task
-                    .setUpdateCurrent(true)
-                    //set required network state, this line is optional
-                    .setRequiredNetwork(Task.NETWORK_STATE_ANY)
-                    //request that charging must be connected, this line is optional
-                    .setRequiresCharging(false)
-                    .build();
-            GcmNetworkManager.getInstance(context).schedule(periodic);
-            Log.v(TAG, "repeating task scheduled");
-        } catch (Exception e) {
-            Log.e(TAG, "scheduling failed");
-            e.printStackTrace();
-        }
+//        //in this method, single Repeating task is scheduled (the target service that will be called is ConversationUpdateService.class)
+//        try {
+//            PeriodicTask periodic = new PeriodicTask.Builder()
+//                    //specify target service - must extend GcmTaskService
+//                    .setService(ConversationUpdateService.class)
+//                    //repeat every 10 seconds
+//                    .setPeriod(10)
+//                    //specify how much earlier the task can be executed (in seconds)
+//                    .setFlex(10)
+//                    //tag that is unique to this task (can be used to cancel task)
+//                    .setTag(GCM_REPEAT_TAG)
+//                    //whether the task persists after device reboot
+//                    .setPersisted(true)
+//                    //if another task with same tag is already scheduled, replace it with this task
+//                    .setUpdateCurrent(true)
+//                    //set required network state, this line is optional
+//                    .setRequiredNetwork(Task.NETWORK_STATE_ANY)
+//                    //request that charging must be connected, this line is optional
+//                    .setRequiresCharging(false)
+//                    .build();
+//            GcmNetworkManager.getInstance(context).schedule(periodic);
+//            Log.v(TAG, "repeating task scheduled");
+//        } catch (Exception e) {
+//            Log.e(TAG, "scheduling failed");
+//            e.printStackTrace();
+//        }
     }
 
     private NotificationCompat.Builder buildNotificationWithoutImage(NotificationMessage notMes, PendingIntent resultPendingIntent){

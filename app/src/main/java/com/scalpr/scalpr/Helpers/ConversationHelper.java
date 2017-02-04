@@ -70,7 +70,7 @@ public class ConversationHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -113,7 +113,7 @@ public class ConversationHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -150,7 +150,7 @@ public class ConversationHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -188,7 +188,7 @@ public class ConversationHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -237,7 +237,7 @@ public class ConversationHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -299,6 +299,25 @@ public class ConversationHelper {
         return conversations;
     }
 
+    public NotificationMessage parseSingleNotificationMessageFromJSON(String json){
+        NotificationMessage notMes = new NotificationMessage();
+
+        try {
+            JSONObject jsonMesNot = new JSONObject(json);
+
+                notMes.setMessageID(jsonMesNot.getLong("messageID"));
+                notMes.setMessage(jsonMesNot.getString("message"));
+                notMes.setConvoID(jsonMesNot.getLong("convoID"));
+                notMes.setYourName(jsonMesNot.getString("yourName"));
+                notMes.setImageURL(jsonMesNot.getString("imageURL"));
+                notMes.setAttractionName(jsonMesNot.getString("attractionName"));
+
+        }catch (Exception ex){
+            return null;
+        }
+        return notMes;
+    }
+
     public ArrayList<NotificationMessage> parseNotificationMessageFromJSON(String json){
         ArrayList<NotificationMessage> list = new ArrayList<NotificationMessage>();
         try{
@@ -358,7 +377,7 @@ public class ConversationHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -400,7 +419,7 @@ public class ConversationHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -442,7 +461,7 @@ public class ConversationHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -484,7 +503,7 @@ public class ConversationHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };

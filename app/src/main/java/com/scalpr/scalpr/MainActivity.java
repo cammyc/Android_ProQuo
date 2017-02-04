@@ -61,6 +61,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.lapism.searchview.SearchAdapter;
 import com.lapism.searchview.SearchItem;
 import com.lapism.searchview.SearchView;
@@ -68,6 +69,7 @@ import com.scalpr.scalpr.Adapters.MarkerInfoWindowAdapter;
 import com.scalpr.scalpr.Adapters.RecyclerItemClickListener;
 import com.scalpr.scalpr.Adapters.RecyclerViewImageAdapter;
 import com.scalpr.scalpr.BackgroundService.ConversationUpdateService;
+import com.scalpr.scalpr.BackgroundService.MyFirebaseInstanceIDService;
 import com.scalpr.scalpr.Helpers.AttractionHelper;
 import com.scalpr.scalpr.Helpers.BingImageSearchHelper;
 import com.scalpr.scalpr.Helpers.ConversationHelper;
@@ -113,6 +115,9 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
     ConversationHelper convoHelper;
 
     boolean initialAttractionRequestCalled = false;
+
+    private static final String TAG = "MyFirebaseIIDService";
+
 
 
     //STORE MARKERS IN LOCAL SQLITE DB, when bounds change get new markers that haven't already been download and query data from local db that way markers dont need to be cleared
@@ -223,11 +228,12 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
 
         if(userIsLoggedIn){
             loggedInUser = loginHelp.getLoggedInUser();
-            //Intent mServiceIntent = new Intent(c, ConversationUpdateService.class);
-            //startService(mServiceIntent);
-            //JobManager.create(c).addJobCreator(new ConversationJobCreator());
-           // ConversationUpdateJobService cujs = new ConversationUpdateJobService();
-            //cujs.schedulePeriodicJob();
+            String token = FirebaseInstanceId.getInstance().getToken();
+
+            if(token != null){
+                loginHelp.updateTokenIfNecessary(token, loggedInUser.getUserID());
+            }
+
             GoogleApiAvailability api = GoogleApiAvailability.getInstance();
             int errorCheck = api.isGooglePlayServicesAvailable(this);
             if(errorCheck == ConnectionResult.SUCCESS) {

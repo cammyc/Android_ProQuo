@@ -73,7 +73,7 @@ public class AttractionHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -127,7 +127,7 @@ public class AttractionHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -166,7 +166,7 @@ public class AttractionHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -234,7 +234,7 @@ public class AttractionHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -278,7 +278,7 @@ public class AttractionHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -324,7 +324,7 @@ public class AttractionHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };
@@ -367,7 +367,7 @@ public class AttractionHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
-                params.put(c.getResources().getString(R.string.headerName), Security.encrypt(c.getResources().getString(R.string.code),c.getResources().getString(R.string.key)));
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
                 return params;
             }
         };

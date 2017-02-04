@@ -541,7 +541,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             // form field with an error.
             focusView.requestFocus();
         } else {
-           loginHelp.LoginRequest(loginResponseListener,email,password,true);
+           loginHelp.LoginRequest(loginResponseListener,email,password);
         }
     }
 

@@ -22,10 +22,12 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.lapism.searchview.SearchHistoryTable;
 import com.lapism.searchview.SearchItem;
 import com.lapism.searchview.SearchView;
 import com.scalpr.scalpr.Helpers.UserHelper;
+import com.scalpr.scalpr.Objects.HttpResponseListener;
 import com.scalpr.scalpr.Objects.User;
 
 import org.w3c.dom.Text;
@@ -96,7 +98,72 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
                     .setCancelable(false)
                     .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog,int id) {
-                            loginHelp.Logout();
+                            dialog.dismiss();
+
+                            HttpResponseListener listener = new HttpResponseListener() {
+                                @Override
+                                public void requestStarted() {
+
+                                }
+
+                                @Override
+                                public void requestCompleted(String response) {
+                                    if(response.equals("1")){
+                                        loginHelp.Logout(); //if no token just log out
+                                    }else{
+                                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                                context);
+
+                                        // set title
+                                        alertDialogBuilder.setTitle("Logout Error");
+
+                                        // set dialog message
+                                        alertDialogBuilder
+                                                .setMessage("Unable to logout without a network connection.")
+                                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        dialog.dismiss();
+                                                    }
+                                                })
+                                                .setCancelable(false);
+
+                                        // create alert dialog
+                                        final AlertDialog alertDialog = alertDialogBuilder.create();
+                                        alertDialog.show();
+                                    }
+                                }
+
+                                @Override
+                                public void requestEndedWithError(VolleyError error) {
+                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                            context);
+
+                                    // set title
+                                    alertDialogBuilder.setTitle("Logout Error");
+
+                                    // set dialog message
+                                    alertDialogBuilder
+                                            .setMessage("Unable to logout without a network connection.")
+                                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    dialog.dismiss();
+                                                }
+                                            })
+                                            .setCancelable(false);
+
+                                    // create alert dialog
+                                    final AlertDialog alertDialog = alertDialogBuilder.create();
+                                    alertDialog.show();
+                                }
+                            };
+
+                            String token = loginHelp.getFirebaseToken();
+
+                            if(token != null) {
+                                loginHelp.removeFirebaseLoginToken(listener, token);
+                            }else{
+                                loginHelp.Logout(); //if no token just log out
+                            }
                         }
                     })
                     .setNegativeButton("No",new DialogInterface.OnClickListener() {
