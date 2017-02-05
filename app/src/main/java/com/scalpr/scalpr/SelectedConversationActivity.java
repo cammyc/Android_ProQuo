@@ -35,6 +35,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.scalpr.scalpr.Adapters.ConversationListAdapter;
 import com.scalpr.scalpr.Adapters.MessageListAdapter;
+import com.scalpr.scalpr.BackgroundService.MyFirebaseMessagingService;
 import com.scalpr.scalpr.Helpers.ConversationHelper;
 import com.scalpr.scalpr.Helpers.DatabaseHelper;
 import com.scalpr.scalpr.Helpers.UserHelper;

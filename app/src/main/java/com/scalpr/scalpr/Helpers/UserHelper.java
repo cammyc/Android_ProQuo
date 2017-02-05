@@ -522,6 +522,43 @@ public class UserHelper {
         queue.add(sr);
     }
 
+    public void removeAccessToken(final HttpResponseListener mPostCommentResponse, final String token){
+        mPostCommentResponse.requestStarted();
+        RequestQueue queue = Volley.newRequestQueue(c);
+        StringRequest sr = new StringRequest(Request.Method.POST,"https://scalpr-143904.appspot.com/scalpr_ws/remove_access_token.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mPostCommentResponse.requestCompleted(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mPostCommentResponse.requestEndedWithError(error);
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("accessToken", token);
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                params.put(c.getResources().getString(R.string.headerName), Security.getAccessToken(c));
+                return params;
+            }
+        };
+        sr.setRetryPolicy(new DefaultRetryPolicy(
+                20000,
+                0,//DONT FUCK WITH THE REPEATING. DONT WANT ANY REPEAT OR THERE MAY BE REPETITION IN THE DATABASE OR IN THE APP. KEEP IT AT 0
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        queue.add(sr);
+    }
+
     public void CreateOrLoginGoogleAccountRequest(final HttpResponseListener mPostCommentResponse, final String firstName, final String lastName, final String email, final String displayPicURL, final String googleID){
         mPostCommentResponse.requestStarted();
         RequestQueue queue = Volley.newRequestQueue(c);

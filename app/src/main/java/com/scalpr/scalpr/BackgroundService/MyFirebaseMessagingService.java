@@ -89,6 +89,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 sendNotification(notMes);
 
+                
+
             }catch (Exception ex){
 
             }

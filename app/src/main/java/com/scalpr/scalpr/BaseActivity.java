@@ -26,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.lapism.searchview.SearchHistoryTable;
 import com.lapism.searchview.SearchItem;
 import com.lapism.searchview.SearchView;
+import com.scalpr.scalpr.Helpers.Security;
 import com.scalpr.scalpr.Helpers.UserHelper;
 import com.scalpr.scalpr.Objects.HttpResponseListener;
 import com.scalpr.scalpr.Objects.User;
@@ -109,7 +110,25 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
                                 @Override
                                 public void requestCompleted(String response) {
                                     if(response.equals("1")){
+                                        loginHelp.removeAccessToken(new HttpResponseListener() {
+                                            @Override
+                                            public void requestStarted() {
+
+                                            }
+
+                                            @Override
+                                            public void requestCompleted(String response) {
+                                                //not that big a deal if it fails, zombie tokens in db does nothing
+                                            }
+
+                                            @Override
+                                            public void requestEndedWithError(VolleyError error) {
+
+                                            }
+                                        }, Security.getAccessToken(context));
+
                                         loginHelp.Logout(); //if no token just log out
+
                                     }else{
                                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                                                 context);
