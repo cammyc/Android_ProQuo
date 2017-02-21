@@ -57,7 +57,7 @@ public class BitmapHelper {
         }
     }
 
-    public void formatMarker(final String price, String imageURL, final Marker m){
+    public void formatMarker(String imageURL, final Marker m){
         try{
 
 //            DrawableTypeRequest<String> request = Glide.with(c).load(imageURL);
@@ -71,7 +71,7 @@ public class BitmapHelper {
 
             //Glide.cl
 
-            setMarkerImageAsync task = new setMarkerImageAsync(m,price,imageURL);
+            setMarkerImageAsync task = new setMarkerImageAsync(m,imageURL);
             task.execute();
             tasks.add(task);
         }catch (Exception ex){
@@ -79,7 +79,7 @@ public class BitmapHelper {
         }
     }
 
-    public Bitmap formatBitmap(String _price, Bitmap bFromURL){
+    public Bitmap formatBitmap(Bitmap bFromURL){
 //        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
 //        Bitmap bmp = Bitmap.createBitmap(200, 200, conf);
 //        Canvas canvas1 = new Canvas(bmp);
@@ -162,12 +162,10 @@ public class BitmapHelper {
     class setMarkerImageAsync extends AsyncTask<Void,Void,Bitmap>
     {
         Marker m;
-        String price;
         String URL;
 
-        public setMarkerImageAsync(Marker _m, String _price, String _URL) {
+        public setMarkerImageAsync(Marker _m, String _URL) {
             m = _m;
-            price = _price;
             URL = _URL;
         }
 
@@ -196,7 +194,7 @@ public class BitmapHelper {
             super.onPostExecute(result);
 
             if(result != null) {
-                Bitmap b = formatBitmap(price, result);
+                Bitmap b = formatBitmap(result);
                 m.setIcon(BitmapDescriptorFactory.fromBitmap(b));
             }
             m.setVisible(true);

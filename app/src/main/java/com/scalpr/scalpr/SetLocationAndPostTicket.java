@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -12,19 +13,26 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.scalpr.scalpr.Helpers.AttractionHelper;
+import com.scalpr.scalpr.Helpers.BitmapHelper;
 import com.scalpr.scalpr.Helpers.UserHelper;
 import com.scalpr.scalpr.Objects.AttractionSerializable;
 import com.scalpr.scalpr.Objects.HttpResponseListener;
 import com.scalpr.scalpr.Objects.User;
+
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class SetLocationAndPostTicket extends FragmentActivity implements OnMapReadyCallback {
 
@@ -36,6 +44,7 @@ public class SetLocationAndPostTicket extends FragmentActivity implements OnMapR
     UserHelper loginHelp;
     double lat, lon;
     Context c;
+    String markerImageURL = "";
 
     Button bPostTicket;
 
@@ -56,6 +65,7 @@ public class SetLocationAndPostTicket extends FragmentActivity implements OnMapR
         final String description = b.getString("description");
         final String date = b.getString("Date");
         final String imageURL = b.getString("imageURL");
+        markerImageURL = imageURL;
         lat = b.getDouble("lat");
         lon = b.getDouble("lon");
         final User user = loginHelp.getLoggedInUser();
@@ -142,6 +152,16 @@ public class SetLocationAndPostTicket extends FragmentActivity implements OnMapR
 
             marker = mMap.addMarker(new MarkerOptions().position(myLocation).title("Hold and drag to move").draggable(true));
             marker.setDraggable(true);
+//            Glide.with(c).load(markerImageURL).asBitmap().transform(new CropCircleTransformation(c)).dontAnimate().into(new SimpleTarget<Bitmap>(200,200) {
+//                @Override
+//                public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+//                    // Do something with bitmap here.
+//                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap));
+//                }
+//            });
+
+            new BitmapHelper(this).formatMarker(markerImageURL, marker);
+
 
 
             googleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {

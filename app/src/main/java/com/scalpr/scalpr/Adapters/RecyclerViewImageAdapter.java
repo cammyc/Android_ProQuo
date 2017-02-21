@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.scalpr.scalpr.R;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
 /**
  * Created by Cam on 9/19/2016.
  */
@@ -56,7 +58,9 @@ public class RecyclerViewImageAdapter extends RecyclerView.Adapter<RecyclerViewI
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        Glide.with(c).load(mDataset[position]).centerCrop().into(holder.mImageView);
+        //Glide.with(c).load(mDataset[position]).centerCrop().into(holder.mImageView);
+        Glide.with(c).load(mDataset[position]).asBitmap().transform(new CropCircleTransformation(c)).dontAnimate().into(holder.mImageView);//chaning image to prof pic eventually
+
     }
 
 

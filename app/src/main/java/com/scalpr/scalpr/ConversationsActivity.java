@@ -1,8 +1,10 @@
 package com.scalpr.scalpr;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
@@ -63,12 +65,17 @@ public class ConversationsActivity extends AppCompatActivity {
     Context context;
 
     Runnable newMessagesRunnable;
-    Handler delayHandler;
+    //Handler delayHandler;
    // boolean cancelNewMessages = false;
 
     User me;
 
     ArrayList<Conversation> conversations;
+
+    BroadcastReceiver mReceiver;
+    IntentFilter mIntentFilter;
+
+    boolean dontUpdate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +83,9 @@ public class ConversationsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_conversations);
 
         context = this;
+
+        convoHelper = new ConversationHelper(this);
+        userHelper = new UserHelper(this);
 
         llLoadConvosFailed = (LinearLayout) findViewById(R.id.llLoadConversationsFailed);
         bTryAgain = (Button) findViewById(R.id.bTryLoadConversationsAgain);
@@ -89,12 +99,21 @@ public class ConversationsActivity extends AppCompatActivity {
 
         tvNoConversations = (TextView) findViewById(R.id.tvNoConversations);
 
-        convoHelper = new ConversationHelper(this);
-        userHelper = new UserHelper(this);
-
         me = userHelper.getLoggedInUser();
 
         checkMinimumVersion();
+
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context _context, Intent intent) {
+                //Toast.makeText(context, "eeeeeeh oh", Toast.LENGTH_SHORT).show();
+                if (!dontUpdate){
+                    newMessagesRunnable.run();
+                }
+            }
+        };
+
+        mIntentFilter=new IntentFilter("GET_NEW_MESSAGES");
 
         responseListener = new HttpResponseListener() {
             @Override
@@ -140,7 +159,8 @@ public class ConversationsActivity extends AppCompatActivity {
 
                             @Override
                             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
-                                cancelNewMessages(); //temporarily pause
+                                //cancelNewMessages(); //temporarily pause
+                                dontUpdate = true;
 
                                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
@@ -164,7 +184,8 @@ public class ConversationsActivity extends AppCompatActivity {
                                                     @Override
                                                     public void requestCompleted(String response) {
                                                         //cancelNewMessages = false;//need to set to true because new messages was canceled - this seems redundant not sure if needed...
-                                                        getNewMessagesDelayed();
+                                                        //getNewMessagesDelayed();
+                                                        dontUpdate = false;
                                                         if (response.equals("1")) {
                                                             conversations.remove(viewHolder.getAdapterPosition());
                                                             mRecyclerView.getAdapter().notifyDataSetChanged();
@@ -184,7 +205,8 @@ public class ConversationsActivity extends AppCompatActivity {
                                                     @Override
                                                     public void requestEndedWithError(VolleyError error) {
                                                        // cancelNewMessages = false;
-                                                        getNewMessagesDelayed();
+                                                        //getNewMessagesDelayed();
+                                                        dontUpdate = false;
                                                         mRecyclerView.getAdapter().notifyItemChanged(viewHolder.getAdapterPosition());
                                                         clearView(mRecyclerView, viewHolder);
                                                         dialog.dismiss();
@@ -201,7 +223,8 @@ public class ConversationsActivity extends AppCompatActivity {
                                                 mRecyclerView.getAdapter().notifyItemChanged(viewHolder.getAdapterPosition());
                                                 clearView(mRecyclerView, viewHolder);
                                                 //cancelNewMessages = false;
-                                                getNewMessagesDelayed();
+                                                dontUpdate = false;
+                                                //getNewMessagesDelayed();
                                                 dialog.dismiss();
                                             }
                                         });
@@ -262,9 +285,13 @@ public class ConversationsActivity extends AppCompatActivity {
                                 Log.d("state", actionState + "");
 
                                 if(actionState == ItemTouchHelper.ACTION_STATE_IDLE){
-                                    getNewMessagesDelayed();
+                                    //getNewMessagesDelayed();
+                                    dontUpdate = false;
+                                    newMessagesRunnable.run();
+
                                 }else if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
-                                    cancelNewMessages();
+                                    dontUpdate = true;
+                                    //cancelNewMessages();
                                 }
 
                                 super.onSelectedChanged(viewHolder, actionState);
@@ -280,12 +307,30 @@ public class ConversationsActivity extends AppCompatActivity {
                                 return false;
                             }
                         });
+
+                        for(int i = 0; i < conversations.size(); i++){
+                            Conversation convo = conversations.get(i);
+                            Bundle bConvoID = getIntent().getBundleExtra("convoIDBundle");
+
+                            if(bConvoID != null){
+                                long id = bConvoID.getLong("goToConvoID", 0);
+                                if(id == convo.getID()){
+                                    Intent intent = new Intent(context, SelectedConversationActivity.class);
+                                    Bundle b = new Bundle();
+                                    b.putSerializable("convo", convo);
+                                    intent.putExtra("convoBundle", b);
+                                    context.startActivity(intent);
+                                    return;
+                                }
+                            }
+
+                        }
                     } else {
                         tvNoConversations.setVisibility(View.VISIBLE);
                     }
 
                     //cancelNewMessages = false;
-                    getNewMessagesDelayed();
+                   // getNewMessagesDelayed();
                 }else{
                     llLoadConvosFailed.setVisibility(View.VISIBLE);
                 }
@@ -317,7 +362,7 @@ public class ConversationsActivity extends AppCompatActivity {
                     }
                 }
 
-                getNewMessagesDelayed();
+                //getNewMessagesDelayed();
             }
 
             @Override
@@ -335,7 +380,7 @@ public class ConversationsActivity extends AppCompatActivity {
             }
         });
 
-        delayHandler = new Handler();
+        //delayHandler = new Handler();
         newMessagesRunnable = new Runnable() {
             @Override
             public void run() {
@@ -353,26 +398,29 @@ public class ConversationsActivity extends AppCompatActivity {
 
     }
 
-    private void getNewMessagesDelayed(){//because this is delayed when the queue is canceled, by luck, this runs 2 seconds later and restarts the queue. That won't work on crappy connection where request takes longer than 2 seconds
-        //so what needs to happen is when I cancel the quese I cancel the handler. Then when the message is sent I restart the handler
-        delayHandler.postDelayed(newMessagesRunnable, 4000);//this may feel laggy, will switch to 1 second after testing
-    }
-
-    private void cancelNewMessages(){
-        //cancelNewMessages = true;
-
-        if(convoHelper != null) {
-            convoHelper.cancelRequests(); //VERY IMPORTANT this is in case a getNewMessagesRequest is ahead on the queue.Trying to avoid duplicates messages showing up
-        }
-
-        if(delayHandler != null){
-            delayHandler.removeCallbacks(newMessagesRunnable);
-        }
-    }
+//    private void getNewMessagesDelayed(){//because this is delayed when the queue is canceled, by luck, this runs 2 seconds later and restarts the queue. That won't work on crappy connection where request takes longer than 2 seconds
+//        //so what needs to happen is when I cancel the quese I cancel the handler. Then when the message is sent I restart the handler
+//        delayHandler.postDelayed(newMessagesRunnable, 4000);//this may feel laggy, will switch to 1 second after testing
+//    }
+//
+//    private void cancelNewMessages(){
+//        //cancelNewMessages = true;
+//
+//        if(convoHelper != null) {
+//            convoHelper.cancelRequests(); //VERY IMPORTANT this is in case a getNewMessagesRequest is ahead on the queue.Trying to avoid duplicates messages showing up
+//        }
+//
+//        if(delayHandler != null){
+//            delayHandler.removeCallbacks(newMessagesRunnable);
+//        }
+//    }
 
     @Override
     protected void onResume() {
         super.onResume();
+        dontUpdate = false;
+        MiscHelper.showNotification = false;
+        registerReceiver(mReceiver, mIntentFilter);
         if(userHelper.isUserLoggedIn()) {
             if(mAdapter != null){
 //                conversations = new ArrayList<Conversation>();
@@ -388,7 +436,12 @@ public class ConversationsActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
-        cancelNewMessages();
+        dontUpdate = true;
+        MiscHelper.showNotification = true;
+        if(mReceiver != null){
+            unregisterReceiver(mReceiver);
+        }
+        //cancelNewMessages();
     }
 
     private void deleteOldMessages(ArrayList<Conversation> convos){

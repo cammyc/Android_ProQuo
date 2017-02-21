@@ -335,7 +335,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             mSearchView.setHint(R.string.search);
             mSearchView.setTextSize(16);
             mSearchView.setDivider(false);
-            mSearchView.setVoice(true);
+            mSearchView.setVoice(false);
 //            mSearchView.setVoiceText("Set permission on Android 6+ !");
             mSearchView.setAnimationDuration(SearchView.ANIMATION_DURATION);
             mSearchView.setShadowColor(ContextCompat.getColor(this, R.color.search_shadow_layout));

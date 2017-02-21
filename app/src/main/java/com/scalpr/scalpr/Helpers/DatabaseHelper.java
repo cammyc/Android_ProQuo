@@ -271,6 +271,48 @@ public class DatabaseHelper {
         return attractions;
     }
 
+    /**
+     * never let query be based off user input
+     * @param query to search by
+     * @return list of attractions in local database
+     */
+    public ArrayList<Attraction> getAttractionsFromDBFreeQuery(String query){
+        ArrayList<Attraction> attractions = new ArrayList<Attraction>();
+        SQLiteDatabase db = mDB.getReadableDatabase();
+        String[] columns = new String[]{"*"};
+
+        //Cursor c = db.rawQuery("SELECT * FROM " + DbInitializer.FeedEntry.TABLE_NAME + venueAttractionSearch, null);
+        Cursor c = db.rawQuery(query, null);
+
+        try {
+            while (c.moveToNext()) {
+                Attraction a = new Attraction();
+
+                a.setID(c.getLong(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_ID)));
+                a.setCreatorID(c.getLong(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_CREATORID)));
+                a.setVenueName(c.getString(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_VENUENAME)));
+                a.setName(c.getString(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_NAME)));
+                a.setTicketPrice(c.getDouble(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_TICKETPRICE)));
+                a.setNumTickets(c.getInt(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_NUMBEROFTICKETS)));
+                a.setDescription(c.getString(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_DESCRIPTION)));
+                a.setDate(c.getString(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_DATE)));
+                a.setImageURL(c.getString(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_IMAGEURL)));
+                a.setLat(c.getDouble(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_LAT)));
+                a.setLon(c.getDouble(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_LON)));
+                a.setTimeStamp(c.getString(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_TIMESTAMP)));
+                attractions.add(a);
+            }
+        }catch (Exception ex) {
+            Log.d("DB_LOG",ex.toString());
+        }finally{
+            c.close();
+        }
+
+        db.close();
+
+        return attractions;
+    }
+
     public List<SearchItem> getSearchSuggestions(){
         List<SearchItem> suggestionsList = new ArrayList<>();
         SQLiteDatabase db = mDB.getReadableDatabase();

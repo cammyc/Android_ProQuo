@@ -34,6 +34,17 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_my_location"
             app:backgroundTint="#FFFFFF"
+            android:layout_above="@+id/fab2"
+            android:layout_alignLeft="@+id/fab2"
+            android:layout_alignStart="@+id/fab2"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_attraction_list"
+            app:backgroundTint="#FFFFFF"
+            android:layout_marginTop="8dp"
             android:layout_above="@+id/fab"
             android:layout_alignLeft="@+id/fab"
             android:layout_alignStart="@+id/fab"/>
@@ -43,7 +54,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_money_white_icon"
-            android:layout_margin="@dimen/fab_margin"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true" />
 

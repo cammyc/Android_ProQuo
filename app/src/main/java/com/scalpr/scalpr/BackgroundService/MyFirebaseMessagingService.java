@@ -27,6 +27,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -38,6 +39,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.scalpr.scalpr.ConversationsActivity;
 import com.scalpr.scalpr.Helpers.ConversationHelper;
+import com.scalpr.scalpr.Helpers.MiscHelper;
 import com.scalpr.scalpr.MainActivity;
 import com.scalpr.scalpr.Objects.NotificationMessage;
 import com.scalpr.scalpr.R;
@@ -87,9 +89,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notMes.setImageURL(data.get("imageURL"));
                 notMes.setAttractionName(data.get("attractionName"));
 
-                sendNotification(notMes);
+                if(MiscHelper.showNotification) {
+                    sendNotification(notMes);
+                }
 
-                
+                Intent broadcast = new Intent();
+                broadcast.setAction("GET_NEW_MESSAGES");
+                sendBroadcast(broadcast);
 
             }catch (Exception ex){
 
@@ -117,6 +123,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
             Intent intent = new Intent(this, ConversationsActivity.class);
+            Bundle b = new Bundle();
+            b.putLong("goToConvoID", notMes.getConvoID());
+            intent.putExtra("convoIDBundle", b);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                     PendingIntent.FLAG_ONE_SHOT);

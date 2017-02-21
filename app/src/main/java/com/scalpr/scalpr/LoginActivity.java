@@ -13,7 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -422,6 +424,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         etPasswordConfirmCA = (EditText) findViewById(R.id.etPasswordConfirmCreateAccount);
 
         bCreateAccount = (Button) findViewById(R.id.bCreateAccount);
+
+        TextView tvForgotPW = (TextView) findViewById(R.id.tvForgotPassword);
+
+        String linkTxt=getResources().getString(R.string.forgotPWLink);
+
+        tvForgotPW.setText(Html.fromHtml(linkTxt));
+        tvForgotPW.setClickable(true);
+        tvForgotPW.setLinksClickable(true);
+        tvForgotPW.setMovementMethod (LinkMovementMethod.getInstance());
     }
 
     /**

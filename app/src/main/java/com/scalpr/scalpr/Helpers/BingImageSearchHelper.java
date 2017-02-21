@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -91,10 +92,15 @@ public class BingImageSearchHelper {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("Ocp-Apim-Subscription-Key", "eda851850263475eafeab76e243880ac");
+                params.put("Ocp-Apim-Subscription-Key", "af466a4301e4434aab69bbc02176a9e9");
                 return params;
             }
         };
+        sr.setRetryPolicy(new DefaultRetryPolicy(
+                20000,
+                0,//DONT FUCK WITH THE REPEATING. DONT WANT ANY REPEAT OR THERE MAY BE REPETITION IN THE DATABASE OR IN THE APP. KEEP IT AT 0
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         queue.add(sr);
     }
 

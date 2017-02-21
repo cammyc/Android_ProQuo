@@ -7,10 +7,12 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.scalpr.scalpr.Helpers.MiscHelper;
 import com.scalpr.scalpr.Helpers.UserHelper;
 import com.scalpr.scalpr.Objects.Conversation;
@@ -20,6 +22,8 @@ import com.scalpr.scalpr.R;
 import java.util.ArrayList;
 import java.util.Date;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
 /**
  * Created by Cam on 11/7/2016.
  */
@@ -27,6 +31,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
 
     Context context;
     ArrayList<Message> messages;
+    String imageURL;
     long myUserID;
     int MY_MESSAGE = -4;
     int YOUR_MESSAGE = -5;
@@ -34,15 +39,17 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
     int TIME_BREAK = -3;
 
 
-    public MessageListAdapter(Context _c, ArrayList<Message> _messages){
+    public MessageListAdapter(Context _c, ArrayList<Message> _messages, String _imageURL){
         context = _c;
         messages = _messages;
         myUserID = new UserHelper(_c).getLoggedInUser().getUserID();
+        imageURL = _imageURL;
     }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView myText, yourText, tvTimeBreak;
+        ImageView ivImage;
         ProgressBar pbMessageSending;
         public ViewHolder(View v) {
             super(v);
@@ -50,6 +57,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
             yourText = (TextView) v.findViewById(R.id.tvYourMessage);
             pbMessageSending = (ProgressBar) v.findViewById(R.id.pbMessageSending);
             tvTimeBreak = (TextView) v.findViewById(R.id.tvMessageTimeBreak);
+            ivImage = (ImageView) v.findViewById(R.id.ivAttrImage);
         }
     }
 
@@ -104,6 +112,8 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
             }else{//your message
                 holder.yourText.setText(m.getText());
                 holder.yourText.setMovementMethod(LinkMovementMethod.getInstance());
+                Glide.with(context).load(imageURL).asBitmap().transform(new CropCircleTransformation(context)).dontAnimate().into(holder.ivImage);
+
             }
         }
 

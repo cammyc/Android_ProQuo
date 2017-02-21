@@ -27,6 +27,8 @@ import java.util.TreeMap;
  */
 public class MiscHelper {
 
+    public static boolean showNotification = true;
+
     public static String formatDouble(double doub){
         String price = "";
 

@@ -90,6 +90,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
 public class MainActivity extends BaseActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMarkerClickListener {
 
@@ -113,6 +115,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
     BitmapHelper markerHelper;
     DatabaseHelper dbHelper;
     ConversationHelper convoHelper;
+    Dialog postTicketDialog;
 
     boolean initialAttractionRequestCalled = false;
 
@@ -208,7 +211,9 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
     }
 
     private void masterInitialize(){
-        checkMinimumVersion();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            checkMinimumVersion();
+        }
 
         pbInitialLoader = (ProgressBar) findViewById(R.id.pbInitialLoader);
 
@@ -653,14 +658,14 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                     .title("$"+ MiscHelper.formatDouble(a.getTicketPrice()) + " - " + a.getName()));
             m.setVisible(false);
 
-            markerHelper.formatMarker(a.getTicketPrice() + "", a.getImageURL(), m);
+            markerHelper.formatMarker(a.getImageURL(), m);
         }
     }
 
     private void setSingleMarker(Attraction a){
         Marker m = mMap.addMarker(new MarkerOptions().snippet(attractionHelper.attractionToJsonShort(a)).position(new LatLng(a.getLat(), a.getLon()))
                 .title("$"+ MiscHelper.formatDouble(a.getTicketPrice()) + " - " + a.getName()));
-        markerHelper.formatMarker(a.getTicketPrice() + "", a.getImageURL(), m);
+        markerHelper.formatMarker(a.getImageURL(), m);
     }
 
     private void initializeMapFragment(){
@@ -674,6 +679,10 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
         if (resultCode == SET_LOCATION_AND_POST_TICKET_CODE_SUCCESS){
 
             try {//feels like an error could easily happen here
+                if(postTicketDialog != null){
+                    postTicketDialog.dismiss();
+                }
+
                 Bundle b = data.getBundleExtra("bundle");
                 Serializable s = b.getSerializable("attraction");
                 AttractionSerializable ap = (AttractionSerializable) s;
@@ -904,7 +913,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
             return;
         }
 
-        dialog.dismiss();
+        //dialog.dismiss();
 
         Intent intent = new Intent(c, SetLocationAndPostTicket.class);
         Bundle b = new Bundle();
@@ -932,24 +941,24 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
 
                     if(userIsLoggedIn){
                         // custom dialog
-                        final Dialog dialog = new Dialog(context);
-                        dialog.setContentView(R.layout.sell_ticket_dialog);
-                        dialog.setTitle("Sell Ticket");
+                        postTicketDialog = new Dialog(context);
+                        postTicketDialog.setContentView(R.layout.sell_ticket_dialog);
+                        postTicketDialog.setTitle("Sell Ticket");
 
-                        final ImageView ivSelectedMarkerIcon = (ImageView) dialog.findViewById(R.id.ivSelectedImage);
-                        Button dialogButton = (Button) dialog.findViewById(R.id.bDoneSellTicket);
-                        final ProgressBar pbLoadAttractionImages = (ProgressBar) dialog.findViewById(R.id.pbLoadAttractionImages);
+                        final ImageView ivSelectedMarkerIcon = (ImageView) postTicketDialog.findViewById(R.id.ivSelectedImage);
+                        Button dialogButton = (Button) postTicketDialog.findViewById(R.id.bDoneSellTicket);
+                        final ProgressBar pbLoadAttractionImages = (ProgressBar) postTicketDialog.findViewById(R.id.pbLoadAttractionImages);
 
-                        etVenueName = (EditText) dialog.findViewById(R.id.etVenueName);
-                        etAttractionName = (EditText) dialog.findViewById(R.id.etAttractionName);
-                        etAttractionPrice = (EditText) dialog.findViewById(R.id.etAttractionPrice);
-                        etNumberOfTickets = (EditText) dialog.findViewById(R.id.etAttractionNumberOfTickets);
-                        etAttractionDatePicker = (EditText) dialog.findViewById(R.id.etAttractionDatePicker);
+                        etVenueName = (EditText) postTicketDialog.findViewById(R.id.etVenueName);
+                        etAttractionName = (EditText) postTicketDialog.findViewById(R.id.etAttractionName);
+                        etAttractionPrice = (EditText) postTicketDialog.findViewById(R.id.etAttractionPrice);
+                        etNumberOfTickets = (EditText) postTicketDialog.findViewById(R.id.etAttractionNumberOfTickets);
+                        etAttractionDatePicker = (EditText) postTicketDialog.findViewById(R.id.etAttractionDatePicker);
                         etAttractionDatePicker.setInputType(InputType.TYPE_NULL);
-                        etAttractionDescription = (EditText) dialog.findViewById(R.id.etAttractionDescription);
-                        etAttractionImageSearch = (EditText) dialog.findViewById(R.id.etAttractionImageSearch);
+                        etAttractionDescription = (EditText) postTicketDialog.findViewById(R.id.etAttractionDescription);
+                        etAttractionImageSearch = (EditText) postTicketDialog.findViewById(R.id.etAttractionImageSearch);
 
-                        final TextInputLayout tilMarkerImageSearch = (TextInputLayout) dialog.findViewById(R.id.tilMarkerImageSearchLayout);
+                        final TextInputLayout tilMarkerImageSearch = (TextInputLayout) postTicketDialog.findViewById(R.id.tilMarkerImageSearchLayout);
                         etAttractionImageSearch.setImeOptions(EditorInfo.IME_ACTION_DONE);
                         final BingImageSearchHelper imageHelper = new BingImageSearchHelper(context);
 
@@ -957,7 +966,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                         etAttractionPrice.setFilters( new InputFilter[]{new DecimalDigitsInputFilter(2), new InputFilterMinMax(0, 1000000)});
                         etNumberOfTickets.setFilters(new InputFilter[]{new InputFilterMinMax(1,1000000)});
 
-                        final RecyclerView mRecyclerView = (RecyclerView) dialog.findViewById(R.id.my_recycler_view);
+                        final RecyclerView mRecyclerView = (RecyclerView) postTicketDialog.findViewById(R.id.my_recycler_view);
 
                         // use this setting to improve performance if you know that changes
                         // in content do not change the layout size of the RecyclerView
@@ -969,7 +978,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                         dialogButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                attemptPostTicket(dialog, userLocation.latitude, userLocation.longitude);
+                                attemptPostTicket(postTicketDialog, userLocation.latitude, userLocation.longitude);
                             }
                         });
 
@@ -988,7 +997,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                                         // do whatever
                                         selectedImageURL = imageURLs[position];
                                         ivSelectedMarkerIcon.setVisibility(View.VISIBLE);
-                                        Glide.with(context).load(selectedImageURL).centerCrop().into(ivSelectedMarkerIcon);
+                                        Glide.with(context).load(selectedImageURL).asBitmap().transform(new CropCircleTransformation(c)).dontAnimate().into(ivSelectedMarkerIcon);
 
                                         mRecyclerView.setVisibility(View.GONE);
                                         tilMarkerImageSearch.setVisibility(View.GONE);
@@ -1021,6 +1030,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                             @Override
                             public void requestEndedWithError(VolleyError error) {
                                 pbLoadAttractionImages.setVisibility(View.GONE);
+                                Toast.makeText(c, "Unable to load images, please check your connection.", Toast.LENGTH_SHORT).show();
                             }
                         };
 
@@ -1117,7 +1127,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                         });
 
 
-                        dialog.show();
+                        postTicketDialog.show();
                     }else{
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                                 context);
@@ -1163,6 +1173,19 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                         Toast.makeText(c,"Unable to determine your location", Toast.LENGTH_LONG).show();
                     }
 
+                }
+            });
+
+        }
+
+        FloatingActionButton goToAttrList = (FloatingActionButton) findViewById(R.id.fab2);
+        if (goToAttrList != null){
+            goToAttrList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(c, AttractionList.class);
+                    startActivity(intent);
+//                    overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                 }
             });
 

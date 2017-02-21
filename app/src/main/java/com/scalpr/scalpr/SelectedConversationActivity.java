@@ -1,6 +1,9 @@
 package com.scalpr.scalpr;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -38,6 +41,7 @@ import com.scalpr.scalpr.Adapters.MessageListAdapter;
 import com.scalpr.scalpr.BackgroundService.MyFirebaseMessagingService;
 import com.scalpr.scalpr.Helpers.ConversationHelper;
 import com.scalpr.scalpr.Helpers.DatabaseHelper;
+import com.scalpr.scalpr.Helpers.MiscHelper;
 import com.scalpr.scalpr.Helpers.UserHelper;
 import com.scalpr.scalpr.Objects.Conversation;
 import com.scalpr.scalpr.Objects.HttpResponseListener;
@@ -81,6 +85,9 @@ public class SelectedConversationActivity extends AppCompatActivity {
 
     Conversation convo;
     Context c;
+
+    BroadcastReceiver mReceiver;
+    IntentFilter mIntentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +141,16 @@ public class SelectedConversationActivity extends AppCompatActivity {
         Toolbar toolbar=(Toolbar) customActionBarView.getParent();
         toolbar.setContentInsetsAbsolute(0,0);
 
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //Toast.makeText(c, "eeeeeeh oh", Toast.LENGTH_SHORT).show();
+                newMessagesRunnable.run();
+            }
+        };
+
+        mIntentFilter=new IntentFilter("GET_NEW_MESSAGES");
+
         getInitialMessagesListener = new HttpResponseListener() {
             @Override
             public void requestStarted() {
@@ -154,13 +171,21 @@ public class SelectedConversationActivity extends AppCompatActivity {
                     }
                 });
 
-               initializeInitialMessages(true);
+               initializeInitialMessages();
             }
 
             @Override
             public void requestEndedWithError(VolleyError error) {
                 llFailedToConnect.setVisibility(View.VISIBLE);
-                getNewMessagesDelayed();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        convoHelper.getConversationMessagesRequest(getInitialMessagesListener,convo.getID());
+                    }
+                }, 2000);
+
+                //getNewMessagesRetry();
 
                 Log.d("MESSAGES_ERROR", error.toString());
             }
@@ -224,7 +249,7 @@ public class SelectedConversationActivity extends AppCompatActivity {
                 }
 
                 //cancelNewMesages = false;
-                getNewMessagesDelayed();
+                //getNewMessagesDelayed();
 
             }
 
@@ -242,7 +267,7 @@ public class SelectedConversationActivity extends AppCompatActivity {
                 Toast.makeText(c, "Unable to send message. Please try again.", Toast.LENGTH_SHORT).show();
                 Log.d("SENDMESSAGE", error.toString());
 
-                currentGetNewMessagesRequest = convoHelper.getNewConversationMessagesRequest(getNewMessagesListener, convo.getID(), me.getUserID());
+                //currentGetNewMessagesRequest = convoHelper.getNewConversationMessagesRequest(getNewMessagesListener, convo.getID(), me.getUserID());
             }
         };
 
@@ -264,7 +289,7 @@ public class SelectedConversationActivity extends AppCompatActivity {
                     etMessageText.setText("");
 
                     //need to cancel handler here
-                    cancelNewMessages();
+//                    cancelNewMessages();
                     convoHelper.sendConversationMessageRequest(sendMessageListener, convo.getID(), me.getUserID(), text);
                 }
             }
@@ -336,14 +361,13 @@ public class SelectedConversationActivity extends AppCompatActivity {
                     mLayoutManager.scrollToPosition(0);
                 }
 
-                getNewMessagesDelayed();
             }
 
             @Override
             public void requestEndedWithError(VolleyError error) {
                // if(!cancelNewMesages) {
                     llFailedToConnect.setVisibility(View.VISIBLE);
-                    getNewMessagesDelayed();
+                    getNewMessagesRetry();
                 //}
             }
         };
@@ -351,7 +375,7 @@ public class SelectedConversationActivity extends AppCompatActivity {
         messages = dbHelper.getMessagesFromDB(convo.getID(),0);
         if(messages.size() > 0){
             Log.d("HELLO", messages.size() + "");
-            initializeInitialMessages(false);
+            initializeInitialMessages();
         }else{
             convoHelper.getConversationMessagesRequest(getInitialMessagesListener,convo.getID());
         }
@@ -360,24 +384,40 @@ public class SelectedConversationActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        cancelNewMessages();
+        MiscHelper.showNotification = true;
+
+        if(mReceiver != null){
+            unregisterReceiver(mReceiver);
+        }
+        //cancelNewMessages();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        MiscHelper.showNotification = false;
+        registerReceiver(mReceiver, mIntentFilter);
+
+        if(mAdapter != null && messagesAreLoaded){ //messagesAreLoaded is true only after initial messages have been loaded
+            newMessagesRunnable.run();
+        }
+
 //        if(cancelNewMesages){
 //            cancelNewMesages = false;
-            getNewMessagesDelayed();
+            //getNewMessagesDelayed();
        // }
     }
 
-    private void getNewMessagesDelayed(){//because this is delayed when the queue is canceled, by luck, this runs 2 seconds later and restarts the queue. That won't work on crappy connection where request takes longer than 2 seconds
-        //so what needs to happen is when I cancel the quese I cancel the handler. Then when the message is sent I restart the handler
+    private void getNewMessagesRetry(){
         delayHandler.postDelayed(newMessagesRunnable, 2000);//this may feel laggy, will switch to 1 second after testing
     }
 
-    private void initializeInitialMessages(boolean delay){
+//    private void getNewMessagesDelayed(){//because this is delayed when the queue is canceled, by luck, this runs 2 seconds later and restarts the queue. That won't work on crappy connection where request takes longer than 2 seconds
+//        //so what needs to happen is when I cancel the quese I cancel the handler. Then when the message is sent I restart the handler
+//        delayHandler.postDelayed(newMessagesRunnable, 2000);//this may feel laggy, will switch to 1 second after testing
+//    }
+
+    private void initializeInitialMessages(){
         for(int i = 0; i < messages.size()-1; i++){
             Date date1 = messages.get(i).getTimeStamp();
             Date date2 = messages.get(i + 1).getTimeStamp();
@@ -404,28 +444,29 @@ public class SelectedConversationActivity extends AppCompatActivity {
 
         lastMessageID = messages.get(0).getID();
 
-        mAdapter = new MessageListAdapter(c, messages);
+        mAdapter = new MessageListAdapter(c, messages, convo.getAttractionImageURL());
         mRecyclerView.setAdapter(mAdapter);
         messagesAreLoaded = true;
 
-        if(delay){
-            getNewMessagesDelayed();
-        }else{
-            newMessagesRunnable.run(); //no need for delay on first call.
-        }
+//        if(delay){
+//            //getNewMessagesDelayed();
+//        }else{
+//        }
+        newMessagesRunnable.run(); //no need for delay on first call.
+
     }
 
-    private void cancelNewMessages(){
-        //cancelNewMesages = true;
-
-        if(convoHelper != null) {
-            convoHelper.cancelRequests(); //VERY IMPORTANT this is in case a getNewMessagesRequest is ahead on the queue.Trying to avoid duplicates messages showing up
-        }
-
-        if(delayHandler != null){
-            delayHandler.removeCallbacks(newMessagesRunnable);
-        }
-    }
+//    private void cancelNewMessages(){
+//        //cancelNewMesages = true;
+//
+//        if(convoHelper != null) {
+//            convoHelper.cancelRequests(); //VERY IMPORTANT this is in case a getNewMessagesRequest is ahead on the queue.Trying to avoid duplicates messages showing up
+//        }
+//
+//        if(delayHandler != null){
+//            delayHandler.removeCallbacks(newMessagesRunnable);
+//        }
+//    }
 
 
 }
