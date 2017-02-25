@@ -106,6 +106,8 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
     GoogleApiClient mGoogleApiClient;
     private GoogleMap mMap;
     private int SET_LOCATION_AND_POST_TICKET_CODE_SUCCESS = 1;
+    private int ATTR_LIST_RESULT = 2;
+
     LatLng userLocation;
     Location mLastLocation;
     Location mCurrentLocation;
@@ -702,6 +704,36 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
             }catch (Exception ex){
                 Log.d("ACTIVITY_RESULT", ex.toString());
             }
+        }else if(resultCode == ATTR_LIST_RESULT){
+
+            try {//feels like an error could easily happen here
+                if(postTicketDialog != null){
+                    postTicketDialog.dismiss();
+                }
+
+                Bundle b = data.getBundleExtra("bundle");
+                Serializable s = b.getSerializable("attraction");
+                AttractionSerializable ap = (AttractionSerializable) s;
+
+                boolean viewOnMap = b.getBoolean("viewOnMap", false);
+                boolean contactSeller = b.getBoolean("contactSeller", false);
+
+                if(viewOnMap){
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(new LatLng(ap.getLat(), ap.getLon()))      // Sets the center of the map to location user
+                            .zoom(15.5f)                    // Sets the orientation of the camera to east
+                            //.tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                            .build();                   // Creates a CameraPosition from the builder
+                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                }else if (contactSeller){
+                    contactSeller(ap.getID(), loggedInUser.getUserID(), ap.getName());
+                }
+
+
+
+            }catch (Exception ex){
+                Log.d("ACTIVITY_RESULT", ex.toString());
+            }
         }
     }
 
@@ -832,18 +864,23 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
             @Override
             public void onCameraIdle() {
 
-                float zoom = mMap.getCameraPosition().zoom;
-                if(zoom < 12){
-                    Toast toast = Toast.makeText(c,"You are zoomed too far out.\nPlease zoom in.", Toast.LENGTH_LONG);
-                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-                    if( v != null) v.setGravity(Gravity.CENTER);
-                    toast.show();
-                }else{
-                    if(initialAttractionRequestCalled) {
-                        VisibleRegion bounds = mMap.getProjection().getVisibleRegion();
-                        String IDs = dbHelper.getCommaSepIDsFromDB();
-                        attractionHelper.getNewAttractionsRequest(getNewAttractionsListener, bounds.latLngBounds.southwest.latitude, bounds.latLngBounds.northeast.latitude, bounds.latLngBounds.northeast.longitude, bounds.latLngBounds.southwest.longitude, searchViewQuery,IDs);
-                    }
+//                float zoom = mMap.getCameraPosition().zoom;
+//                if(zoom < 12){
+//                    Toast toast = Toast.makeText(c,"You are zoomed too far out.\nPlease zoom in.", Toast.LENGTH_LONG);
+//                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+//                    if( v != null) v.setGravity(Gravity.CENTER);
+//                    toast.show();
+//                }else{
+//                    if(initialAttractionRequestCalled) {
+//                        VisibleRegion bounds = mMap.getProjection().getVisibleRegion();
+//                        String IDs = dbHelper.getCommaSepIDsFromDB();
+//                        attractionHelper.getNewAttractionsRequest(getNewAttractionsListener, bounds.latLngBounds.southwest.latitude, bounds.latLngBounds.northeast.latitude, bounds.latLngBounds.northeast.longitude, bounds.latLngBounds.southwest.longitude, searchViewQuery,IDs);
+//                    }
+//                }
+                if(initialAttractionRequestCalled) {
+                    VisibleRegion bounds = mMap.getProjection().getVisibleRegion();
+                    String IDs = dbHelper.getCommaSepIDsFromDB();
+                    attractionHelper.getNewAttractionsRequest(getNewAttractionsListener, bounds.latLngBounds.southwest.latitude, bounds.latLngBounds.northeast.latitude, bounds.latLngBounds.northeast.longitude, bounds.latLngBounds.southwest.longitude, searchViewQuery,IDs);
                 }
             }
         });
@@ -1184,7 +1221,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(c, AttractionList.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, ATTR_LIST_RESULT);
 //                    overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                 }
             });
@@ -1197,8 +1234,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 0: {
                 // If request is cancelled, the result arrays are empty.

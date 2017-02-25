@@ -136,4 +136,23 @@ public class Attraction {
         this.lon = ap.getLon();
         this.user = ap.getUser();
     }
+
+    public AttractionSerializable toSerializable(){
+        AttractionSerializable attrSer = new AttractionSerializable();
+
+        attrSer.setID(this.getID());
+        attrSer.setCreatorID(this.getCreatorID());
+        attrSer.setVenueName(this.getVenueName());
+        attrSer.setName(this.getName());
+        attrSer.setTicketPrice(this.getTicketPrice());
+        attrSer.setNumTickets(this.getNumTickets());
+        attrSer.setDescription(this.getDescription());
+        attrSer.setDate(this.getDate());
+        attrSer.setImageURL(this.getImageURL());
+        attrSer.setLat(this.getLat());
+        attrSer.setLon(this.getLon());
+        attrSer.setUser(this.getUser());
+
+        return attrSer;
+    }
 }

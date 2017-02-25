@@ -7,6 +7,11 @@
                 android:title="My Tickets" />
 
             <item
+            android:id="@+id/nav_account_settings"
+            android:icon="@drawable/ic_profile_black"
+            android:title="Edit Profile" />
+
+            <item
             android:id="@+id/nav_search"
             android:icon="@drawable/ic_search_black"
             android:title="Search Tickets" />
@@ -21,20 +26,15 @@
                 android:icon="@drawable/ic_post_ticket"
                 android:title="Post Ticket" />
 
-
-            <item
-            android:id="@+id/nav_account_settings"
-            android:icon="@drawable/ic_profile_black"
-            android:title="Edit Profile" />
-
-            <item
-                android:id="@+id/nav_log_out"
-                android:icon="@drawable/ic_log_out"
-                android:title="Log Out" />
-
             <item
                 android:id="@+id/nav_contact_us"
                 android:icon="@drawable/ic_mail_black_24dp"
                 android:title="Contact Us" />
+
+
+    <item
+        android:id="@+id/nav_log_out"
+        android:icon="@drawable/ic_log_out"
+        android:title="Log Out" />
 
 </menu>
