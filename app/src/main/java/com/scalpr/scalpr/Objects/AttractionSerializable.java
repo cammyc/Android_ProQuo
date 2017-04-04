@@ -18,6 +18,7 @@ public class AttractionSerializable implements Serializable {
     private double lat;
     private double lon;
     private User user;
+    private int postType;
 
     public long getID() {
         return ID;
@@ -115,4 +116,11 @@ public class AttractionSerializable implements Serializable {
         this.user = user;
     }
 
+    public int getPostType() {
+        return postType;
+    }
+
+    public void setPostType(int postType) {
+        this.postType = postType;
+    }
 }

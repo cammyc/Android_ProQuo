@@ -20,6 +20,7 @@ public class Conversation implements Serializable{
     private ArrayList<Message> messages;
     private Date creationTimeStamp;
     private boolean isLastMessageRead;
+    private int postType;
 
     public long getID() {
         return ID;
@@ -115,5 +116,13 @@ public class Conversation implements Serializable{
 
     public void setLastMessageRead(boolean lastMessageRead) {
         isLastMessageRead = lastMessageRead;
+    }
+
+    public int getPostType() {
+        return postType;
+    }
+
+    public void setPostType(int postType) {
+        this.postType = postType;
     }
 }

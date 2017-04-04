@@ -2,6 +2,7 @@ package com.scalpr.scalpr.Helpers;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.DisplayMetrics;
 
 import com.android.volley.AuthFailureError;
@@ -12,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.scalpr.scalpr.Objects.HttpResponseListener;
+import com.scalpr.scalpr.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,6 +30,10 @@ import java.util.TreeMap;
 public class MiscHelper {
 
     public static boolean showNotification = true;
+
+    public static int getPostColor(Context c, int postType){
+        return (postType == 2) ? ResourcesCompat.getColor(c.getResources(), R.color.requestTicket, null) :  ResourcesCompat.getColor(c.getResources(), R.color.sellTicket, null);
+    }
 
     public static String formatDouble(double doub){
         String price = "";

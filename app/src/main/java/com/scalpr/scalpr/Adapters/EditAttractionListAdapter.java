@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -20,18 +21,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.scalpr.scalpr.EditTicketLocation;
 import com.scalpr.scalpr.Helpers.AttractionHelper;
 import com.scalpr.scalpr.Helpers.BingImageSearchHelper;
@@ -69,7 +74,7 @@ public class EditAttractionListAdapter extends RecyclerView.Adapter<EditAttracti
     private EditText etVenueName, etAttractionName,etAttractionPrice,etNumberOfTickets, etAttractionDatePicker,etAttractionDescription,etAttractionImageSearch;
     private String selectedImageURL;
     private String[] imageURLs;
-
+    private Spinner spinny;
     private Attraction tempEditedAttraction;
     private EditAttractionListAdapter adapter;
 
@@ -148,7 +153,13 @@ public class EditAttractionListAdapter extends RecyclerView.Adapter<EditAttracti
 
         if(a.getID() != -1){
             try{
-                Glide.with(c).load(a.getImageURL()).bitmapTransform(new CropCircleTransformation(c)).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.ivAttractionPic);
+                Glide.with(c).load(a.getImageURL()).asBitmap()
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                holder.ivAttractionPic.setImageBitmap(new BitmapHelper(c).getCircleBitmap(resource , holder.ivAttractionPic.getWidth(), holder.ivAttractionPic.getHeight(), a.getPostType()));
+                            }
+                        });
             }catch (Exception ex){
 
             }
@@ -225,6 +236,9 @@ public class EditAttractionListAdapter extends RecyclerView.Adapter<EditAttracti
             holder.tvVenueName.setText(a.getVenueName());
             holder.tvTicketPriceAndNumTickets.setText("$" + MiscHelper.formatDouble(a.getTicketPrice()) + " · " + a.getNumTickets() + " Tickets");
 
+            int color = MiscHelper.getPostColor(this.c, a.getPostType());
+            holder.tvTicketPriceAndNumTickets.setTextColor(color);
+
             holder.updateAttractionResponseListener = new HttpResponseListener() {
                 @Override
                 public void requestStarted() {
@@ -237,9 +251,16 @@ public class EditAttractionListAdapter extends RecyclerView.Adapter<EditAttracti
                     holder.tvAttractionName.setText(tempEditedAttraction.getName());
                     holder.tvVenueName.setText(tempEditedAttraction.getVenueName());
                     holder.tvTicketPriceAndNumTickets.setText("$" + MiscHelper.formatDouble(tempEditedAttraction.getTicketPrice()) + " · " + tempEditedAttraction.getNumTickets() + " Tickets");
-
+                    int color = MiscHelper.getPostColor(c, tempEditedAttraction.getPostType());
+                    holder.tvTicketPriceAndNumTickets.setTextColor(color);
                     try{
-                        Glide.with(c).load(tempEditedAttraction.getImageURL()).bitmapTransform(new CropCircleTransformation(c)).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.ivAttractionPic);
+                        Glide.with(c).load(tempEditedAttraction.getImageURL()).asBitmap()
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                        holder.ivAttractionPic.setImageBitmap(new BitmapHelper(c).getCircleBitmap(resource , holder.ivAttractionPic.getWidth(), holder.ivAttractionPic.getHeight(), tempEditedAttraction.getPostType()));
+                                    }
+                                });
                     }catch (Exception ex){
 
                     }
@@ -304,6 +325,21 @@ public class EditAttractionListAdapter extends RecyclerView.Adapter<EditAttracti
         etAttractionPrice.setText(MiscHelper.formatDouble(a.getTicketPrice()));
         etNumberOfTickets.setText(a.getNumTickets() + "");
         etAttractionDatePicker.setText(MiscHelper.formatDate(a.getDate()));
+
+        spinny = (Spinner) dialog.findViewById(R.id.spinnerRequestSell);
+        ArrayList<String> options = new ArrayList<String>();
+        options.add("Selling Ticket");
+        options.add("Requesting Ticket");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(c, R.layout.spinner_row, options);
+        adapter.setDropDownViewResource(R.layout.spinner_row);
+        spinny.setAdapter(adapter);
+
+        if(a.getPostType() == 1){
+            spinny.setSelection(0, true);
+        }else{
+            spinny.setSelection(1, true);
+        }
 
         //fix below
 
@@ -467,6 +503,8 @@ public class EditAttractionListAdapter extends RecyclerView.Adapter<EditAttracti
         String numberOfTickets = etNumberOfTickets.getText().toString().trim();
         String date = etAttractionDatePicker.getText().toString().trim();
         String description = etAttractionDescription.getText().toString().trim();
+        int postType = (spinny.getSelectedItemPosition() == 0) ? 1 : 2; //first item is selling ticket, second item is requesting
+
 
         View focusView = null;
 
@@ -522,8 +560,9 @@ public class EditAttractionListAdapter extends RecyclerView.Adapter<EditAttracti
         tempEditedAttraction.setDescription(description);
         tempEditedAttraction.setDate(date);
         tempEditedAttraction.setImageURL(selectedImageURL);
+        tempEditedAttraction.setPostType(postType);
 
-        attractionHelper.UpdateAttractionDetailsRequest(updateAttractionResponseListener, loginHelp.getLoggedInUser().getUserID(), attractionID, venueName, attractionName, price, numberOfTickets, description, date, selectedImageURL);
+        attractionHelper.UpdateAttractionDetailsRequest(updateAttractionResponseListener, loginHelp.getLoggedInUser().getUserID(), attractionID, venueName, attractionName, price, numberOfTickets, description, date, selectedImageURL, postType);
         return true;
     }
 

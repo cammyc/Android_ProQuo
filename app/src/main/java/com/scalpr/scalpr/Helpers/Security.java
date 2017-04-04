@@ -48,6 +48,11 @@ public class Security {
         }catch(Exception e){
             System.out.println(e.toString());
         }
-        return new String(output);
+
+        if(output == null){
+            return ""; //avoid null pointer error, will be null if user not logged in
+        }else{
+            return new String(output);
+        }
     }
 }

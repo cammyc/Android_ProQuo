@@ -30,11 +30,13 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -100,6 +102,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
     ProgressBar pbInitialLoader;
     private String selectedImageURL;
     private HttpResponseListener imageResponseListener, getInitialAttractionListener, getNewAttractionsListener, getNewSearchAttractionsListener, getConversationInfoListener, checkVersionListener;
+    private Spinner spinny;
     private String[] imageURLs;
     private String selectedAttractionName, selectedVenueName, selectedAttractionPrice, searchViewQuery;
 
@@ -497,12 +500,12 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
         getInitialAttractionListener = new HttpResponseListener() {
             @Override
             public void requestStarted() {
+                initialAttractionRequestCalled = true;
             }
 
             @Override
             public void requestCompleted(String response) {
                 pbInitialLoader.setVisibility(View.GONE);
-                initialAttractionRequestCalled = true;
                 ArrayList<Attraction> attractions = attractionHelper.getAttractions(response);
                 dbHelper.addAttractionsToDB(attractions);
                 setMarkers(attractions);
@@ -660,14 +663,14 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                     .title("$"+ MiscHelper.formatDouble(a.getTicketPrice()) + " - " + a.getName()));
             m.setVisible(false);
 
-            markerHelper.formatMarker(a.getImageURL(), m);
+            markerHelper.formatMarker(a.getImageURL(), m, a.getPostType());
         }
     }
 
     private void setSingleMarker(Attraction a){
         Marker m = mMap.addMarker(new MarkerOptions().snippet(attractionHelper.attractionToJsonShort(a)).position(new LatLng(a.getLat(), a.getLon()))
                 .title("$"+ MiscHelper.formatDouble(a.getTicketPrice()) + " - " + a.getName()));
-        markerHelper.formatMarker(a.getImageURL(), m);
+        markerHelper.formatMarker(a.getImageURL(), m, a.getPostType());
     }
 
     private void initializeMapFragment(){
@@ -715,17 +718,23 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                 Serializable s = b.getSerializable("attraction");
                 AttractionSerializable ap = (AttractionSerializable) s;
 
-                boolean viewOnMap = b.getBoolean("viewOnMap", false);
+                boolean centerMap = b.getBoolean("centerMap", false);
                 boolean contactSeller = b.getBoolean("contactSeller", false);
 
-                if(viewOnMap){
+                if(centerMap){
                     CameraPosition cameraPosition = new CameraPosition.Builder()
                             .target(new LatLng(ap.getLat(), ap.getLon()))      // Sets the center of the map to location user
                             .zoom(15.5f)                    // Sets the orientation of the camera to east
                             //.tilt(40)                   // Sets the tilt of the camera to 30 degrees
                             .build();                   // Creates a CameraPosition from the builder
-                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                }else if (contactSeller){
+                    if (contactSeller){
+                        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));//animation is laggy when showing alert so dont animate for contact seller
+                    }else{
+                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    }
+                }
+
+                if (contactSeller){
                     contactSeller(ap.getID(), loggedInUser.getUserID(), ap.getName());
                 }
 
@@ -905,6 +914,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
         String numberOfTickets = etNumberOfTickets.getText().toString().trim();
         String date = etAttractionDatePicker.getText().toString().trim();
         String description = etAttractionDescription.getText().toString().trim();
+        int postType = (spinny.getSelectedItemPosition() == 0) ? 1 : 2; //first item is selling ticket, second item is requesting
 
         View focusView = null;
 
@@ -963,6 +973,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
         b.putString("imageURL",selectedImageURL);
         b.putDouble("lat", lat);
         b.putDouble("lon", lon);
+        b.putInt("postType", postType);
         intent.putExtra("bundle",b);
         startActivityForResult(intent, SET_LOCATION_AND_POST_TICKET_CODE_SUCCESS);
 
@@ -1002,6 +1013,15 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
 
                         etAttractionPrice.setFilters( new InputFilter[]{new DecimalDigitsInputFilter(2), new InputFilterMinMax(0, 1000000)});
                         etNumberOfTickets.setFilters(new InputFilter[]{new InputFilterMinMax(1,1000000)});
+
+                        spinny = (Spinner) postTicketDialog.findViewById(R.id.spinnerRequestSell);
+                        ArrayList<String> options = new ArrayList<String>();
+                        options.add("Selling Ticket");
+                        options.add("Requesting Ticket");
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(c, R.layout.spinner_row, options);
+                        adapter.setDropDownViewResource(R.layout.spinner_row);
+                        spinny.setAdapter(adapter);
 
                         final RecyclerView mRecyclerView = (RecyclerView) postTicketDialog.findViewById(R.id.my_recycler_view);
 

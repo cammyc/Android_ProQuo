@@ -20,7 +20,7 @@ import java.util.ArrayList;
  */
 public class DbInitializer extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8; // updated 03/29/2017
     public static final String DATABASE_NAME = "Scalpr.db";
     private static final String TEXT_TYPE = "TEXT";
     private static final String INT_TYPE = "INTEGER";
@@ -43,7 +43,8 @@ public class DbInitializer extends SQLiteOpenHelper {
                     FeedEntry.COLUMN_IMAGEURL + " " + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_LAT + " " + DECIMAL_LAT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_LON + " " + DECIMAL_LON_TYPE + COMMA_SEP +
-                    FeedEntry.COLUMN_TIMESTAMP + " " + TIMESTAMP_TYPE + " )";
+                    FeedEntry.COLUMN_TIMESTAMP + " " + TIMESTAMP_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_POSTTYPE + " " + INT_TYPE + " )";
 
     private static final String SQL_CREATE_MESSAGES_TABLE =
             "CREATE TABLE " + FeedEntry.MESSAGES_TABLE_NAME + " (" +
@@ -88,6 +89,7 @@ public class DbInitializer extends SQLiteOpenHelper {
         public static final String COLUMN_LAT = "Lat";
         public static final String COLUMN_LON = "Lon";
         public static final String COLUMN_TIMESTAMP = "TimeStamp";
+        public static final String COLUMN_POSTTYPE = "PostType";
 
         public static final String MESSAGES_TABLE_NAME = "Messages";
         public static final String COLUMN_MESSAGE_ID = "ID";

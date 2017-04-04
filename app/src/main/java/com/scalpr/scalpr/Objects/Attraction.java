@@ -17,6 +17,7 @@ public class Attraction {
     private double lon;
     private String timeStamp;
     private User user;
+    private int postType;
 
     public long getID() {
         return ID;
@@ -122,6 +123,14 @@ public class Attraction {
         this.user = user;
     }
 
+    public int getPostType() {
+        return postType;
+    }
+
+    public void setPostType(int postType) {
+        this.postType = postType;
+    }
+
     public void copyAttractionSerializable(AttractionSerializable ap){
         this.ID = ap.getID();
         this.creatorID = ap.getCreatorID();
@@ -135,6 +144,7 @@ public class Attraction {
         this.lat = ap.getLat();
         this.lon = ap.getLon();
         this.user = ap.getUser();
+        this.postType = ap.getPostType();
     }
 
     public AttractionSerializable toSerializable(){
@@ -152,6 +162,7 @@ public class Attraction {
         attrSer.setLat(this.getLat());
         attrSer.setLon(this.getLon());
         attrSer.setUser(this.getUser());
+        attrSer.setPostType(this.getPostType());
 
         return attrSer;
     }

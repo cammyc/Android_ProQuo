@@ -39,7 +39,7 @@ public class AttractionHelper {
         queue = Volley.newRequestQueue(c);
     }
 
-    public void PostAttractionRequest(final HttpResponseListener attractionPostResponse, final long userID, final String venueName, final String attractionName, final String ticketPrice, final String numberOfTickets, final String description, final String date, final String imageURL, final double lat, final double lon){
+    public void PostAttractionRequest(final HttpResponseListener attractionPostResponse, final long userID, final String venueName, final String attractionName, final String ticketPrice, final String numberOfTickets, final String description, final String date, final String imageURL, final int postType, final double lat, final double lon){
         attractionPostResponse.requestStarted();
         
         StringRequest sr = new StringRequest(Request.Method.POST,"https://scalpr-143904.appspot.com/scalpr_ws/post_attraction.php", new Response.Listener<String>() {
@@ -66,6 +66,7 @@ public class AttractionHelper {
                 params.put("imageURL",imageURL);
                 params.put("lat",String.valueOf(lat));
                 params.put("lon",String.valueOf(lon));
+                params.put("postType", postType + "");
                 return params;
             }
 
@@ -93,6 +94,7 @@ public class AttractionHelper {
             obj.put("description", a.getDescription());
             obj.put("imageURL",a.getImageURL());
             obj.put("date", a.getDate());
+            obj.put("postType", a.getPostType());
         }catch (Exception ex){
 
         }
@@ -134,7 +136,7 @@ public class AttractionHelper {
         queue.add(sr);
     }
 
-    public void UpdateAttractionDetailsRequest(final HttpResponseListener attractionUpdateResponse, final long userID, final long attractionID, final String venueName, final String attractionName, final String ticketPrice, final String numberOfTickets, final String description, final String date, final String imageURL){
+    public void UpdateAttractionDetailsRequest(final HttpResponseListener attractionUpdateResponse, final long userID, final long attractionID, final String venueName, final String attractionName, final String ticketPrice, final String numberOfTickets, final String description, final String date, final String imageURL, final int postType){
         attractionUpdateResponse.requestStarted();
         StringRequest sr = new StringRequest(Request.Method.POST,"https://scalpr-143904.appspot.com/scalpr_ws/update_attraction_details.php", new Response.Listener<String>() {
             @Override
@@ -159,6 +161,7 @@ public class AttractionHelper {
                 params.put("description",description);
                 params.put("date",date);
                 params.put("imageURL",imageURL);
+                params.put("postType", postType + "");
                 return params;
             }
 
@@ -197,6 +200,7 @@ public class AttractionHelper {
                 a.setLat(jsonAttraction.getDouble("lat"));
                 a.setLon(jsonAttraction.getDouble("lon"));
                 a.setTimeStamp(jsonAttraction.getString("timeStamp"));
+                a.setPostType(jsonAttraction.getInt("postType"));
 
                 attractions.add(a);
             }

@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +30,8 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.scalpr.scalpr.EditAttractions;
 import com.scalpr.scalpr.EditTicketLocation;
 import com.scalpr.scalpr.Helpers.AttractionHelper;
@@ -146,7 +149,15 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
 
         if(a.getID() != -1){
             try{
-                Glide.with(c).load(a.getImageURL()).bitmapTransform(new CropCircleTransformation(c)).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.ivAttractionPic);
+                Glide.with(c).load(a.getImageURL()).asBitmap()
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                holder.ivAttractionPic.setImageBitmap(new BitmapHelper(c).getCircleBitmap(resource , holder.ivAttractionPic.getWidth(), holder.ivAttractionPic.getHeight(), a.getPostType()));
+                            }
+                        });
+
+                       // .bitmapTransform(new CropCircleTransformation(c)).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.ivAttractionPic);
             }catch (Exception ex){
 
             }
@@ -170,6 +181,7 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
                                 }else{
                                     Bundle b = new Bundle();
                                     b.putSerializable("attraction",a.toSerializable());
+                                    b.putBoolean("centerMap", true);
                                     b.putBoolean("contactSeller", true);
 
                                     Intent data = new Intent();
@@ -192,10 +204,10 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
                         public void onClick(View v) {
                             Bundle b = new Bundle();
                             b.putSerializable("attraction",a.toSerializable());
+                            b.putBoolean("centerMap", true);
 
                             Intent data = new Intent();
                             data.putExtra("bundle",b);
-                            data.putExtra("viewOnMap", true);
 
                             ((Activity) c).setResult(2,data);
                             ((Activity) c).finish();
@@ -217,6 +229,9 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
             holder.tvAttractionName.setText(a.getName());
             holder.tvVenueName.setText(a.getVenueName());
             holder.tvTicketPriceAndNumTickets.setText("$" + MiscHelper.formatDouble(a.getTicketPrice()) + " · " + a.getNumTickets() + " Tickets");
+            
+            int color = MiscHelper.getPostColor(this.c, a.getPostType());
+            holder.tvTicketPriceAndNumTickets.setTextColor(color);
 
         }else{
             //holder.tvEditAttractionDate.setText(MiscHelper.formatDate(a.getDate(), "EEE dd MMMM yyyy"));

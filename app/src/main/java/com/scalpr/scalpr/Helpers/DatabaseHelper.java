@@ -61,6 +61,7 @@ public class DatabaseHelper {
             values.put(DbInitializer.FeedEntry.COLUMN_LAT,a.getLat());
             values.put(DbInitializer.FeedEntry.COLUMN_LON,a.getLon());
             values.put(DbInitializer.FeedEntry.COLUMN_TIMESTAMP,a.getTimeStamp());
+            values.put(DbInitializer.FeedEntry.COLUMN_POSTTYPE, a.getPostType());
             long id = db.insert(DbInitializer.FeedEntry.TABLE_NAME, null, values);
 
         }
@@ -116,6 +117,7 @@ public class DatabaseHelper {
         values.put(DbInitializer.FeedEntry.COLUMN_DESCRIPTION,a.getDescription());
         values.put(DbInitializer.FeedEntry.COLUMN_DATE,a.getDate());
         values.put(DbInitializer.FeedEntry.COLUMN_IMAGEURL,a.getImageURL());
+        values.put(DbInitializer.FeedEntry.COLUMN_POSTTYPE, a.getPostType());
 
         int didUpdate = db.update(DbInitializer.FeedEntry.TABLE_NAME, values, DbInitializer.FeedEntry.COLUMN_ID + " = " + a.getID(), null);
 
@@ -258,6 +260,7 @@ public class DatabaseHelper {
                 a.setLat(c.getDouble(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_LAT)));
                 a.setLon(c.getDouble(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_LON)));
                 a.setTimeStamp(c.getString(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_TIMESTAMP)));
+                a.setPostType(c.getInt(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_POSTTYPE)));
                 attractions.add(a);
             }
         }catch (Exception ex) {
@@ -300,6 +303,8 @@ public class DatabaseHelper {
                 a.setLat(c.getDouble(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_LAT)));
                 a.setLon(c.getDouble(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_LON)));
                 a.setTimeStamp(c.getString(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_TIMESTAMP)));
+                a.setPostType(c.getInt(c.getColumnIndex(DbInitializer.FeedEntry.COLUMN_POSTTYPE)));
+
                 attractions.add(a);
             }
         }catch (Exception ex) {

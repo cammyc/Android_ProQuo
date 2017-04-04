@@ -3,8 +3,10 @@ package com.scalpr.scalpr.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -91,6 +93,12 @@ public class MarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             else
                 bContactSeller.setText("CONTACT SELLER");
 
+            int postType = obj.getInt("postType");
+            int color = MiscHelper.getPostColor(this.c, postType);
+
+
+            tvAttractionDate.setBackgroundColor(color);
+            bContactSeller.setTextColor(color);
 
             ImageView ivImage = (ImageView) v.findViewById(R.id.ivIwImage);
 

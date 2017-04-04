@@ -62,6 +62,7 @@ public class AttractionList extends AppCompatActivity{
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         pbEditAttractions = (ProgressBar) findViewById(R.id.pbEditAttractions);
+        pbEditAttractions.setVisibility(View.GONE);
         mRecyclerView.setHasFixedSize(true);
         context = this;
 

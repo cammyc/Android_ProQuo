@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">ProQuo</string>
+    <string name="app_name">BeLive</string>
     <string name="title_activity_maps">Map</string>
-    <string name="title_activity_main">ProQuo</string>
+    <string name="title_activity_main">BeLive</string>
     <string name="preference_file_key">com.scalpr.12543</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

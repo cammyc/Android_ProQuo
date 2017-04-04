@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -127,9 +128,12 @@ public class SelectedConversationActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
 
         final View customActionBarView = inflater.inflate(R.layout.actionbar_selected_conversation, null);
+        int color = MiscHelper.getPostColor(this, convo.getPostType());
+        customActionBarView.setBackgroundColor(color);
 
         ImageView ivActionBarImage = (ImageView) customActionBarView.findViewById(R.id.ivActionBar);
         TextView tvActionBar = (TextView) customActionBarView.findViewById(R.id.tvActionBar);
+        actionBar.setBackgroundDrawable(new ColorDrawable(color));
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setCustomView(customActionBarView, new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT, Gravity.RIGHT));

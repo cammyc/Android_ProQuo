@@ -2,6 +2,7 @@ package com.scalpr.scalpr.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -15,6 +16,9 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.scalpr.scalpr.Helpers.BitmapHelper;
 import com.scalpr.scalpr.Helpers.ConversationHelper;
 import com.scalpr.scalpr.Helpers.DatabaseHelper;
 import com.scalpr.scalpr.Helpers.MiscHelper;
@@ -75,7 +79,7 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Conversation c = conversations.get(position);
         String myName;
         String yourName;
@@ -95,8 +99,17 @@ public class ConversationListAdapter extends RecyclerView.Adapter<ConversationLi
 
         String[] otherUser = yourName.split(" ");
 
-        Glide.with(context).load(c.getAttractionImageURL()).asBitmap().transform(new CropCircleTransformation(context)).dontAnimate().into(holder.ivAttractionImage);//changing image to prof pic eventually
+        try{
+            Glide.with(context).load(c.getAttractionImageURL()).asBitmap()
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            holder.ivAttractionImage.setImageBitmap(new BitmapHelper(context).getCircleBitmap(resource , holder.ivAttractionImage.getWidth(), holder.ivAttractionImage.getHeight(), c.getPostType()));
+                        }
+                    });
+        }catch (Exception ex){
 
+        }
 //        holder.tvTitle.setText(yourName + " - " + c.getTitle());
 
         if(c.getLastMessage() != null){

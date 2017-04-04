@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 
 import com.bumptech.glide.DrawableTypeRequest;
@@ -57,7 +58,7 @@ public class BitmapHelper {
         }
     }
 
-    public void formatMarker(String imageURL, final Marker m){
+    public void formatMarker(String imageURL, final Marker m, final int postType){
         try{
 
 //            DrawableTypeRequest<String> request = Glide.with(c).load(imageURL);
@@ -71,7 +72,7 @@ public class BitmapHelper {
 
             //Glide.cl
 
-            setMarkerImageAsync task = new setMarkerImageAsync(m,imageURL);
+            setMarkerImageAsync task = new setMarkerImageAsync(m,imageURL, postType);
             task.execute();
             tasks.add(task);
         }catch (Exception ex){
@@ -79,7 +80,7 @@ public class BitmapHelper {
         }
     }
 
-    public Bitmap formatBitmap(Bitmap bFromURL){
+    public Bitmap formatBitmap(Bitmap bFromURL, int postType){
 //        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
 //        Bitmap bmp = Bitmap.createBitmap(200, 200, conf);
 //        Canvas canvas1 = new Canvas(bmp);
@@ -98,7 +99,8 @@ public class BitmapHelper {
 
         BitmapFactory.Options b = new BitmapFactory.Options();
         b.inScaled = true;
-        Bitmap temp = Bitmap.createScaledBitmap(cropToSquare(bFromURL),200,200, false);
+        int widthHeight = (int) MiscHelper.convertDpToPixel(55, this.c);
+        Bitmap temp = Bitmap.createScaledBitmap(cropToSquare(bFromURL), widthHeight, widthHeight, false);
 
 //        canvas1.drawBitmap(temp, 0, 0, color);
 //        canvas1.drawRect(0, 150, 200, 200, black);
@@ -106,35 +108,83 @@ public class BitmapHelper {
 //
 //        canvas1.drawText("$" + MiscHelper.format((long) Double.parseDouble(_price)), xPos, 190, color);
 
-        Bitmap finalBitmap = getCircleCroppedBitmap(temp);
+        Bitmap finalBitmap = getCircleCroppedBitmap(temp, postType);
 
         return finalBitmap;
     }
 
-    public Bitmap getCircleBitmap(Bitmap b, int width, int height){
-        Bitmap temp = Bitmap.createScaledBitmap(cropToSquare(b), width, height, false);
-        return getCircleCroppedBitmap(temp);
+    public Bitmap getCircleBitmap(Bitmap b, int width, int height, int postType){
+        try {
+            Bitmap temp = Bitmap.createScaledBitmap(cropToSquare(b), width, height, false);
+            return getCircleCroppedBitmap(temp, postType);
+
+        }catch (Exception ex){
+            float widthHeight = MiscHelper.convertDpToPixel(60, this.c);
+
+            Bitmap temp = Bitmap.createScaledBitmap(cropToSquare(b), (int) widthHeight, (int) widthHeight, false);
+            return getCircleCroppedBitmap(temp, postType);
+        }
     }
 
-        public Bitmap getCircleCroppedBitmap(Bitmap bitmap) {
-            Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                    bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(output);
+        public Bitmap getCircleCroppedBitmap(Bitmap bitmap, int postType) {
+//            Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+//                    bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+//            Canvas canvas = new Canvas(output);
+//
+//            final int color = 0xff424242;
+//            final Paint paint = new Paint();
+//            final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+//
+//            paint.setAntiAlias(true);
+//            canvas.drawARGB(0, 0, 0, 0);
+//            paint.setColor(color);
+//
+//            // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+//            canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+//                    bitmap.getWidth() / 2, paint);
+//            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+//            canvas.drawBitmap(bitmap, rect, rect, paint);
+//
+//            canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+//                    bitmap.getWidth() / 2, paint);
+//
+//            final Paint border = new Paint();
+//            border.setXfermode(null);
+//            border.setStyle(Paint.Style.STROKE);
+//            border.setColor(Color.WHITE);
+//            border.setStrokeWidth(10);
+//            canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+//                    bitmap.getWidth() / 2, border);
 
-            final int color = 0xff424242;
-            final Paint paint = new Paint();
-            final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-
-            paint.setAntiAlias(true);
-            canvas.drawARGB(0, 0, 0, 0);
-            paint.setColor(color);
-            // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-            canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
-                    bitmap.getWidth() / 2, paint);
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-            canvas.drawBitmap(bitmap, rect, rect, paint);
             //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
             //return _bmp;
+
+            int w = bitmap.getWidth();
+            int h = bitmap.getHeight();
+            float borderWidth = MiscHelper.convertDpToPixel(4, this.c);
+
+            int radius = Math.min(h / 2, w / 2);
+            Bitmap output = Bitmap.createBitmap(w + (int) borderWidth*2, h + (int) borderWidth*2, Bitmap.Config.ARGB_8888);
+
+            Paint p = new Paint();
+            p.setAntiAlias(true);
+
+            Canvas c = new Canvas(output);
+            c.drawARGB(0, 0, 0, 0);
+            p.setStyle(Paint.Style.FILL);
+
+            c.drawCircle((w / 2) + borderWidth, (h / 2) + borderWidth, radius, p);
+
+            p.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+
+            c.drawBitmap(bitmap, borderWidth, borderWidth, p);
+            p.setXfermode(null);
+            p.setStyle(Paint.Style.STROKE);
+            int color = MiscHelper.getPostColor(this.c, postType);
+            p.setColor(color);
+            p.setStrokeWidth(borderWidth);
+
+            c.drawCircle((w / 2) + borderWidth, (h / 2) +borderWidth, radius, p);
             return output;
         }
 
@@ -163,10 +213,12 @@ public class BitmapHelper {
     {
         Marker m;
         String URL;
+        int postType;
 
-        public setMarkerImageAsync(Marker _m, String _URL) {
+        public setMarkerImageAsync(Marker _m, String _URL, int _postType) {
             m = _m;
             URL = _URL;
+            postType = _postType;
         }
 
         @Override
@@ -194,7 +246,7 @@ public class BitmapHelper {
             super.onPostExecute(result);
 
             if(result != null) {
-                Bitmap b = formatBitmap(result);
+                Bitmap b = formatBitmap(result, postType);
                 m.setIcon(BitmapDescriptorFactory.fromBitmap(b));
             }
             m.setVisible(true);

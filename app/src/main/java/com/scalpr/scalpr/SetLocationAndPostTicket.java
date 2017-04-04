@@ -45,6 +45,7 @@ public class SetLocationAndPostTicket extends FragmentActivity implements OnMapR
     double lat, lon;
     Context c;
     String markerImageURL = "";
+    int postType = 0;
 
     Button bPostTicket;
 
@@ -68,6 +69,7 @@ public class SetLocationAndPostTicket extends FragmentActivity implements OnMapR
         markerImageURL = imageURL;
         lat = b.getDouble("lat");
         lon = b.getDouble("lon");
+        postType = b.getInt("postType", 1);
         final User user = loginHelp.getLoggedInUser();
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapSetSellLocation);
@@ -99,6 +101,7 @@ public class SetLocationAndPostTicket extends FragmentActivity implements OnMapR
                     a.setUser(user);
                     a.setLat(lat);
                     a.setLon(lon);
+                    a.setPostType(postType);
 
                     Bundle b = new Bundle();
                     b.putSerializable("attraction",a);
@@ -126,7 +129,7 @@ public class SetLocationAndPostTicket extends FragmentActivity implements OnMapR
             @Override
             public void onClick(View v) {
 
-                helper.PostAttractionRequest(postTicketResponse, user.getUserID(), venueName, attractionName, ticketPrice, numberOfTickets, description, date, imageURL, marker.getPosition().latitude,  marker.getPosition().longitude);
+                helper.PostAttractionRequest(postTicketResponse, user.getUserID(), venueName, attractionName, ticketPrice, numberOfTickets, description, date, imageURL, postType, marker.getPosition().latitude,  marker.getPosition().longitude);
             }
         });
     }
@@ -160,7 +163,7 @@ public class SetLocationAndPostTicket extends FragmentActivity implements OnMapR
 //                }
 //            });
 
-            new BitmapHelper(this).formatMarker(markerImageURL, marker);
+            new BitmapHelper(this).formatMarker(markerImageURL, marker, postType);
 
 
 

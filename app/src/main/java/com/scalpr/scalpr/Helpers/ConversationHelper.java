@@ -288,6 +288,7 @@ public class ConversationHelper {
                 convo.setAttractionImageURL(jsonConvo.getString("attractionImageURL"));
                 convo.setCreationTimeStamp(MiscHelper.parseUTCStringToDate(jsonConvo.getString("creationTimestamp"),"yyyy-MM-dd H:m:s"));
                 convo.setLastMessageRead((jsonConvo.getInt("isLastMessageRead") == 0) ? false : true);
+                convo.setPostType(jsonConvo.getInt("postType"));
 
                 conversations.add(convo);
             }
