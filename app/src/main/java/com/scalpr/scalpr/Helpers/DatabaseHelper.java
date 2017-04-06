@@ -43,6 +43,10 @@ public class DatabaseHelper {
         return hasChanged;
     }
 
+    public void clearAttractions(){
+        mDB.getWritableDatabase().execSQL("DELETE FROM " + DbInitializer.FeedEntry.TABLE_NAME);
+    }
+
     public void addAttractionsToDB(ArrayList<Attraction> attractions){
         SQLiteDatabase db = mDB.getWritableDatabase();
 

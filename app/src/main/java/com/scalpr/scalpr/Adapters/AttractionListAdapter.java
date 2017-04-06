@@ -172,6 +172,10 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
                     Button bViewOnMap = (Button) dialog.findViewById(R.id.bViewOnMapFromAttrListDialog);
                     Button bCancel = (Button) dialog.findViewById(R.id.bAttrListCancelDialog);
 
+                    final String sellerRequester = (a.getPostType() == 1) ? "Seller" : "Requester";
+
+                    bContactSeller.setText("CONTACT " + sellerRequester.toUpperCase());
+
                    bContactSeller.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -192,7 +196,7 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
 
                                 }
                             }else{
-                                Toast.makeText(c, "Please login to contact the seller", Toast.LENGTH_LONG).show();
+                                Toast.makeText(c, "Please login to contact the " + sellerRequester.toLowerCase(), Toast.LENGTH_LONG).show();
                             }
                             dialog.dismiss();
                             //showDialog(a, holder.updateAttractionResponseListener, position);
@@ -228,7 +232,8 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
 
             holder.tvAttractionName.setText(a.getName());
             holder.tvVenueName.setText(a.getVenueName());
-            holder.tvTicketPriceAndNumTickets.setText("$" + MiscHelper.formatDouble(a.getTicketPrice()) + " · " + a.getNumTickets() + " Tickets");
+            String requestingOrSelling = (a.getPostType() == 1) ? "Requested" : "Being Sold";
+            holder.tvTicketPriceAndNumTickets.setText("$" + MiscHelper.formatDouble(a.getTicketPrice()) + " · " + a.getNumTickets() + " Tickets " + requestingOrSelling);
             
             int color = MiscHelper.getPostColor(this.c, a.getPostType());
             holder.tvTicketPriceAndNumTickets.setTextColor(color);

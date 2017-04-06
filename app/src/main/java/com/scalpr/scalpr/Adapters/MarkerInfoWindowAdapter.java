@@ -88,12 +88,16 @@ public class MarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             TextView tvDescriptionText = (TextView) v.findViewById(R.id.tvIwDescriptionText);
             Button bContactSeller = (Button) v.findViewById(R.id.bContactSeller);
 
-            if(obj.getLong("creatorID") == userID)
-                bContactSeller.setText("THIS IS YOUR POST");
-            else
-                bContactSeller.setText("CONTACT SELLER");
-
             int postType = obj.getInt("postType");
+
+
+            if(obj.getLong("creatorID") == userID) {
+                bContactSeller.setText("THIS IS YOUR POST");
+            }else {
+                String text = (postType == 1) ? "CONTACT SELLER" : "CONTACT REQUESTER";
+                bContactSeller.setText(text);
+            }
+
             int color = MiscHelper.getPostColor(this.c, postType);
 
 

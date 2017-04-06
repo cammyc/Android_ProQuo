@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -83,7 +84,9 @@ import com.scalpr.scalpr.Helpers.BitmapHelper;
 import com.scalpr.scalpr.Helpers.MiscHelper;
 import com.scalpr.scalpr.Objects.Attraction;
 import com.scalpr.scalpr.Objects.AttractionSerializable;
+import com.scalpr.scalpr.Objects.Filters;
 import com.scalpr.scalpr.Objects.HttpResponseListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.json.JSONObject;
 
@@ -92,6 +95,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import io.apptik.widget.MultiSlider;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class MainActivity extends BaseActivity implements OnMapReadyCallback,
@@ -101,10 +105,22 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
     private EditText etVenueName, etAttractionName,etAttractionPrice,etNumberOfTickets, etAttractionDatePicker,etAttractionDescription,etAttractionImageSearch;
     ProgressBar pbInitialLoader;
     private String selectedImageURL;
-    private HttpResponseListener imageResponseListener, getInitialAttractionListener, getNewAttractionsListener, getNewSearchAttractionsListener, getConversationInfoListener, checkVersionListener;
+    private HttpResponseListener imageResponseListener, getInitialAttractionListener, getAttractionsFromFilterListener, getNewAttractionsListener, getNewSearchAttractionsListener, getConversationInfoListener, checkVersionListener;
     private Spinner spinny;
     private String[] imageURLs;
     private String selectedAttractionName, selectedVenueName, selectedAttractionPrice, searchViewQuery;
+
+    // MARK: SlideUpPanel Variables Below
+    Spinner spinnyNumTickets;
+    EditText etStartDate, etEndDate, etMaxPrice;
+    TextView tvMinPrice, tvMaxPrice, tvSlidingUpPanelDragView;
+    Button bSetMax;
+    CheckBox cbRequested, cbBeingSold;
+    MultiSlider priceSlider;
+    SlidingUpPanelLayout slidingUpPanel;
+    DatePickerDialog startDatePicker, endDatePicker;
+
+    Filters filters = new Filters();
 
     GoogleApiClient mGoogleApiClient;
     private GoogleMap mMap;
@@ -217,7 +233,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
 
     private void masterInitialize(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            checkMinimumVersion();
+            checkMinimumVersion(); //this is where termsAndTutorial() is called
         }
 
         pbInitialLoader = (ProgressBar) findViewById(R.id.pbInitialLoader);
@@ -254,6 +270,8 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
 
         initializeMapFragment();
 
+        initializeSlideUpPanel();
+
         setSearchView();
 
         setFab();
@@ -284,7 +302,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                         setMarkers(dbHelper.getAttractionsFromDB(newText));
                         VisibleRegion bounds = mMap.getProjection().getVisibleRegion();
                         String IDs = dbHelper.getCommaSepIDsFromDB();
-                        attractionHelper.getNewAttractionsRequest(getNewAttractionsListener, bounds.latLngBounds.southwest.latitude, bounds.latLngBounds.northeast.latitude, bounds.latLngBounds.northeast.longitude, bounds.latLngBounds.southwest.longitude, searchViewQuery,IDs);
+                        attractionHelper.getNewAttractionsRequest(getNewAttractionsListener, filters, bounds.latLngBounds.southwest.latitude, bounds.latLngBounds.northeast.latitude, bounds.latLngBounds.northeast.longitude, bounds.latLngBounds.southwest.longitude, searchViewQuery,IDs);
                     }
                 }
                 return true;
@@ -297,13 +315,17 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                     clearMapForSearch();
                     ArrayList<Attraction> attractions = dbHelper.getAttractionsFromDB(query.trim());
                     if(attractions.size() > 0){
+                        int num = dbHelper.getAttractionsFromDB("").size();
+
+                        tvSlidingUpPanelDragView.setText(attractions.size() + " Posts Found ● Filters");
+
                         CameraUpdate centerOnMarker = CameraUpdateFactory.newLatLng(new LatLng(attractions.get(0).getLat(),attractions.get(0).getLon()));
                         mMap.animateCamera(centerOnMarker);
                         setMarkers(attractions);
                     }else{
                         VisibleRegion bounds = mMap.getProjection().getVisibleRegion();
                         String IDs = dbHelper.getCommaSepIDsFromDB();
-                        attractionHelper.getNewAttractionsRequest(getNewSearchAttractionsListener, bounds.latLngBounds.southwest.latitude, bounds.latLngBounds.northeast.latitude, bounds.latLngBounds.northeast.longitude, bounds.latLngBounds.southwest.longitude, searchViewQuery,IDs);
+                        attractionHelper.getNewAttractionsRequest(getNewSearchAttractionsListener, filters, bounds.latLngBounds.southwest.latitude, bounds.latLngBounds.northeast.latitude, bounds.latLngBounds.northeast.longitude, bounds.latLngBounds.southwest.longitude, searchViewQuery,IDs);
                         pbInitialLoader.setVisibility(View.VISIBLE);
                     }
 
@@ -351,10 +373,192 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
         }
     }
 
-    private void terms(){
-        SharedPreferences sharedPref = c.getSharedPreferences(c.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        if(!sharedPref.getBoolean("acceptedTerms", false)) {
 
+    private void initializeSlideUpPanel(){
+        slidingUpPanel = (SlidingUpPanelLayout) findViewById(R.id.slidingUpPanel);
+
+        tvSlidingUpPanelDragView = (TextView) findViewById(R.id.tvSlidingPanelDragView);
+        slidingUpPanel.setDragView(tvSlidingUpPanelDragView);
+
+        etStartDate = (EditText) findViewById(R.id.etFilterStartDate);
+        etEndDate = (EditText) findViewById(R.id.etFilterEndDate);
+
+        cbRequested = (CheckBox) findViewById(R.id.cbFilterRequested);
+        cbBeingSold = (CheckBox) findViewById(R.id.cbFilterBeingSold);
+
+        tvMinPrice = (TextView) findViewById(R.id.tvFilterMinPrice);
+        tvMaxPrice = (TextView) findViewById(R.id.tvFilterMaxPrice);
+
+        priceSlider = (MultiSlider) findViewById(R.id.rsFilterMinMaxPrice);
+
+        priceSlider.setOnThumbValueChangeListener(new MultiSlider.OnThumbValueChangeListener() {
+            @Override
+            public void onValueChanged(MultiSlider multiSlider, MultiSlider.Thumb thumb, int thumbIndex, int value) {
+                if(thumbIndex == 0){
+                    tvMinPrice.setText("$" + value);
+                }else{
+                    tvMaxPrice.setText("$" + value);
+                }
+            }
+        });
+
+        etMaxPrice = (EditText) findViewById(R.id.etFilterMaxPrice);
+
+        bSetMax = (Button) findViewById(R.id.bFilterSetMax);
+
+        bSetMax.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    int oldMax = priceSlider.getMax();
+                    priceSlider.setMax(Integer.parseInt(etMaxPrice.getText().toString()));
+                    priceSlider.getThumb(1).setValue(oldMax);
+                }catch (Exception ex){
+                    Toast.makeText(c, "Invalid Max Value", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        spinnyNumTickets = (Spinner) findViewById(R.id.spinnerNumTickets);
+        ArrayList<String> options = new ArrayList<String>();
+        options.add("Any");
+        options.add("1");
+        options.add("2");
+        options.add("3");
+        options.add("4+");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(c, R.layout.spinner_row, options);
+        adapter.setDropDownViewResource(R.layout.spinner_row);
+        spinnyNumTickets.setAdapter(adapter);
+
+        FloatingActionButton fabCloseFilterView = (FloatingActionButton) findViewById(R.id.fabCloseFilter);
+        fabCloseFilterView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              //  tvSlidingUpPanelDragView.requestFocusFromTouch();
+                slidingUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                filters.setShowRequested(cbRequested.isChecked());
+                filters.setShowSelling(cbBeingSold.isChecked());
+                filters.setMinPrice(priceSlider.getThumb(0).getValue());
+                filters.setMaxPrice(priceSlider.getThumb(1).getValue());
+
+                int position = spinnyNumTickets.getSelectedItemPosition();
+
+                if(position == 0){
+                    filters.setNumTickets(-1);
+                }else if(position == 1){
+                    filters.setNumTickets(1);
+                }else if(position == 2){
+                    filters.setNumTickets(2);
+                }else if(position == 3){
+                    filters.setNumTickets(3);
+                }else{
+                    filters.setNumTickets(4);
+                }
+
+                VisibleRegion bounds = mMap.getProjection().getVisibleRegion();
+
+                attractionHelper.getInitialAttractionsRequest(getAttractionsFromFilterListener, filters, bounds.latLngBounds.southwest.latitude, bounds.latLngBounds.northeast.latitude, bounds.latLngBounds.northeast.longitude, bounds.latLngBounds.southwest.longitude);
+
+            }
+        });
+
+        FloatingActionButton fabClearFilter = (FloatingActionButton) findViewById(R.id.fabClearFilter);
+        fabClearFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filters = new Filters();
+                cbBeingSold.setChecked(true);
+                cbRequested.setChecked(true);
+
+                initializeAndRefreshSlideUpDateRanges();
+
+                priceSlider.setMin(0);
+                priceSlider.setMax(1000);
+
+                priceSlider.getThumb(0).setValue(0);
+                priceSlider.getThumb(1).setValue(1000);
+
+                spinnyNumTickets.setSelection(0);
+
+                etMaxPrice.setText("");
+            }
+        });
+
+        // ****************** startDate ******************
+       initializeAndRefreshSlideUpDateRanges();
+    }
+
+    private void initializeAndRefreshSlideUpDateRanges(){
+        Calendar mcurrentDate=Calendar.getInstance();
+        final int mYear=mcurrentDate.get(Calendar.YEAR);
+        final int mMonth=mcurrentDate.get(Calendar.MONTH);
+        final int mDay=mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+        etStartDate.setText((mMonth + 1)+"/"+mDay+"/"+mYear);
+
+        startDatePicker = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                etStartDate.setText((selectedmonth + 1)+"/"+selectedday+"/"+selectedyear);
+                etStartDate.setError(null);
+
+                filters.setStartDate(selectedyear+"-"+(selectedmonth +1)+"-"+selectedday);
+
+                Calendar min = Calendar.getInstance();
+                min.set(selectedyear, selectedmonth, selectedday);
+
+                endDatePicker.getDatePicker().setMinDate(min.getTimeInMillis());
+            }
+        },mYear, mMonth, mDay);
+
+        startDatePicker.getDatePicker().setMinDate(mcurrentDate.getTimeInMillis());
+
+        etStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startDatePicker.setTitle("Select Start Date");
+                startDatePicker.show();
+            }
+        });
+
+        //******************* endDate *********************
+        Calendar mYearFromNowDate=Calendar.getInstance();
+        mYearFromNowDate.set(mYear + 1, mMonth, mDay);
+        int mYearFromNow = mYearFromNowDate.get(Calendar.YEAR);
+
+        etEndDate.setText((mMonth + 1)+"/"+mDay+"/"+mYearFromNow);
+
+        startDatePicker.getDatePicker().setMaxDate(mYearFromNowDate.getTimeInMillis());
+
+        endDatePicker = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                etEndDate.setText((selectedmonth + 1)+"/"+selectedday+"/"+selectedyear);
+                etEndDate.setError(null);
+
+                filters.setEndDate(selectedyear+"-"+(selectedmonth +1)+"-"+selectedday);
+
+                Calendar max = Calendar.getInstance();
+                max.set(selectedyear, selectedmonth, selectedday);
+                startDatePicker.getDatePicker().setMaxDate(max.getTimeInMillis());
+
+            }
+        },mYearFromNow, mMonth, mDay);
+
+        // endDatePicker.getDatePicker().setMinDate();
+
+        etEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                endDatePicker.setTitle("Select End Date");
+                endDatePicker.show();
+            }
+        });
+    }
+
+    private void termsAndTutorial(){
+        final SharedPreferences sharedPref = c.getSharedPreferences(c.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        if(!sharedPref.getBoolean("acceptedTerms", false)) {
 
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                     context);
@@ -385,10 +589,36 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
             alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    alertDialog.dismiss();
+
+                    if(!sharedPref.getBoolean("sawCrappyTutorial", false)){
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                context);
+
+                        // set title
+                        alertDialogBuilder.setTitle("Request Tickets");
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setMessage("You can now request tickets! Tickets with a blue border around them indicate they are being requested by a buyer. Tickets without a border are being sold.")
+                                .setPositiveButton("Got It!", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        SharedPreferences.Editor sharedPref = c.getSharedPreferences(c.getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit();
+                                        sharedPref.putBoolean("sawCrappyTutorial", true);
+                                        sharedPref.commit();
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setCancelable(false);
+
+                        // create alert dialog
+                        final AlertDialog alert = alertDialogBuilder.create();
+                        alert.show();
+                    }
+
                     SharedPreferences.Editor sharedPref = c.getSharedPreferences(c.getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit();
                     sharedPref.putBoolean("acceptedTerms", true);
                     sharedPref.commit();
-                    alertDialog.dismiss();
                 }
             });
 
@@ -399,6 +629,32 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                     startActivity(browserIntent);
                 }
             });
+        }else{
+            if(!sharedPref.getBoolean("sawCrappyTutorial", false)){
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        context);
+
+                // set title
+                alertDialogBuilder.setTitle("Request Tickets");
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("You can now request tickets! Tickets with a blue border around them indicate they are being requested by a buyer. Tickets without a border are being sold.")
+                        .setPositiveButton("Got It!", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                SharedPreferences.Editor sharedPref = c.getSharedPreferences(c.getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit();
+                                sharedPref.putBoolean("sawCrappyTutorial", true);
+                                sharedPref.commit();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setCancelable(false);
+
+                // create alert dialog
+                final AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+
         }
     }
 
@@ -452,19 +708,19 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                            }
                        });
                    }else{
-                       terms();//no need for terms if app is to be updated
+                       termsAndTutorial();//no need for terms if app is to be updated
                    }
 
                }catch (Exception ex){
                    Log.d("MIN_VERSION", ex.toString());
-                   terms();
+                   termsAndTutorial();
                }
 
             }
 
             @Override
             public void requestEndedWithError(VolleyError error) {
-                terms();
+                termsAndTutorial();
             }
         };
 
@@ -507,6 +763,8 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
             public void requestCompleted(String response) {
                 pbInitialLoader.setVisibility(View.GONE);
                 ArrayList<Attraction> attractions = attractionHelper.getAttractions(response);
+                tvSlidingUpPanelDragView.setText(attractions.size() + " Posts Found ● Filters");
+
                 dbHelper.addAttractionsToDB(attractions);
                 setMarkers(attractions);
 
@@ -535,6 +793,53 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
             }
         };
 
+        getAttractionsFromFilterListener = new HttpResponseListener() {
+            @Override
+            public void requestStarted() {
+                dbHelper.clearAttractions();
+                mMap.clear();
+            }
+
+            @Override
+            public void requestCompleted(String response) {
+                pbInitialLoader.setVisibility(View.GONE);
+                ArrayList<Attraction> attractions = attractionHelper.getAttractions(response);
+                tvSlidingUpPanelDragView.setText(attractions.size() + " Posts Found ● Filters");
+
+                dbHelper.addAttractionsToDB(attractions);
+                setMarkers(attractions);
+
+                List<SearchItem> suggestionsList = dbHelper.getSearchSuggestions();
+
+                SearchAdapter searchAdapter = new SearchAdapter(c, suggestionsList);
+                searchAdapter.addOnItemClickListener(new SearchAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        TextView textView = (TextView) view.findViewById(R.id.textView_item_text);
+                        String query = textView.getText().toString();
+                        getData(query, position);
+                        mSearchView.setQuery(query.trim());
+                        mSearchView.close(false);
+                    }
+                });
+
+                try{
+                    mSearchView.invalidate();//this crashed, not sure why but cant deal with right now
+                    mSearchView.setAdapter(searchAdapter);
+                }catch (Exception ex){
+
+                }
+
+
+            }
+
+            @Override
+            public void requestEndedWithError(VolleyError error) {
+                Toast.makeText(c,"Unable to connect. Please try again.", Toast.LENGTH_LONG).show();
+                pbInitialLoader.setVisibility(View.GONE);
+            }
+        };
+
         getNewAttractionsListener = new HttpResponseListener() {
             @Override
             public void requestStarted() {
@@ -545,6 +850,11 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
             public void requestCompleted(String response) {
                 ArrayList<Attraction> attractions = attractionHelper.getAttractions(response);
                 dbHelper.addAttractionsToDB(attractions);
+
+                int num = dbHelper.getAttractionsFromDB(searchViewQuery).size();
+
+                tvSlidingUpPanelDragView.setText(num + " Posts Found ● Filters");
+
                 setMarkers(attractions);
 
 //                List<SearchItem> suggestionsList = dbHelper.getSearchSuggestions();
@@ -580,6 +890,9 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
             public void requestCompleted(String response) {
                 pbInitialLoader.setVisibility(View.GONE);
                 ArrayList<Attraction> attractions = attractionHelper.getAttractions(response);
+
+                tvSlidingUpPanelDragView.setText(attractions.size() + " Posts Found ● Filters");
+
                 dbHelper.addAttractionsToDB(attractions);
 
                 if(attractions.size() > 0){
@@ -619,14 +932,14 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                     startActivity(intent);
 
                 }else{
-                    Toast.makeText(c, "Unable to contact seller. Please try again.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(c, "Unable to contact. Please try again.",Toast.LENGTH_SHORT).show();
                 }
                 pbInitialLoader.setVisibility(View.GONE);
             }
 
             @Override
             public void requestEndedWithError(VolleyError error) {
-                Toast.makeText(c, "Unable to contact seller. Please try again.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(c, "Unable to contact. Please try again.",Toast.LENGTH_SHORT).show();
                 pbInitialLoader.setVisibility(View.GONE);
             }
         };
@@ -735,7 +1048,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                 }
 
                 if (contactSeller){
-                    contactSeller(ap.getID(), loggedInUser.getUserID(), ap.getName());
+                    contactSeller(ap.getID(), loggedInUser.getUserID(), ap.getName(), ap.getPostType());
                 }
 
 
@@ -767,21 +1080,25 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                     long attractionID = obj.getLong("attractionID");
                     long creatorID = obj.getLong("creatorID");
                     String attractionName = obj.getString("attractionName");
+                    int postType = obj.getInt("postType");
+
+                    String sellerOrBuyer = (postType == 1) ? "seller" : "requester";
+
 
                     if(loginHelp.isUserLoggedIn()){
                         if(creatorID == loggedInUser.getUserID()){
                             Intent intent = new Intent(c, EditAttractions.class);
                             startActivity(intent);
                         }else{
-                            contactSeller(attractionID, loggedInUser.getUserID(), attractionName);
+                            contactSeller(attractionID, loggedInUser.getUserID(), attractionName, postType);
                         }
                     }else{
-                        Toast.makeText(c, "You must be logged in to contact the seller", Toast.LENGTH_LONG).show();
+                        Toast.makeText(c, "You must be logged in to contact the " + sellerOrBuyer, Toast.LENGTH_LONG).show();
                     }
 
 
                 }catch (Exception ex){
-                    Toast.makeText(c, "Error contacting the seller. Please Try Again.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(c, "Error trying to contact. Please Try Again.", Toast.LENGTH_LONG).show();
                 }
 
 
@@ -792,16 +1109,18 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
 
     }
 
-    private void contactSeller(final long attractionID, final long buyerID, final String attractionName){
+    private void contactSeller(final long attractionID, final long buyerID, final String attractionName, final int postType){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 context);
 
+        String sellerOrBuyer = (postType == 1) ? "Seller" : "Requester";
+
         // set title
-        alertDialogBuilder.setTitle("Contact Seller");
+        alertDialogBuilder.setTitle("Contact " + sellerOrBuyer);
 
         // set dialog message
         alertDialogBuilder
-                .setMessage("Would you like to contact the seller?")
+                .setMessage("Would you like to contact the "+sellerOrBuyer.toLowerCase()+"?")
                 .setCancelable(false)
                 .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
@@ -889,12 +1208,12 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                 if(initialAttractionRequestCalled) {
                     VisibleRegion bounds = mMap.getProjection().getVisibleRegion();
                     String IDs = dbHelper.getCommaSepIDsFromDB();
-                    attractionHelper.getNewAttractionsRequest(getNewAttractionsListener, bounds.latLngBounds.southwest.latitude, bounds.latLngBounds.northeast.latitude, bounds.latLngBounds.northeast.longitude, bounds.latLngBounds.southwest.longitude, searchViewQuery,IDs);
+                    attractionHelper.getNewAttractionsRequest(getNewAttractionsListener, filters, bounds.latLngBounds.southwest.latitude, bounds.latLngBounds.northeast.latitude, bounds.latLngBounds.northeast.longitude, bounds.latLngBounds.southwest.longitude, searchViewQuery,IDs);
                 }
             }
         });
 
-        attractionHelper.getInitialAttractionsRequest(getInitialAttractionListener, bounds.latLngBounds.southwest.latitude, bounds.latLngBounds.northeast.latitude, bounds.latLngBounds.northeast.longitude, bounds.latLngBounds.southwest.longitude);
+        attractionHelper.getInitialAttractionsRequest(getInitialAttractionListener, filters, bounds.latLngBounds.southwest.latitude, bounds.latLngBounds.northeast.latitude, bounds.latLngBounds.northeast.longitude, bounds.latLngBounds.southwest.longitude);
         //Log.d("BOUNDS",bounds.latLngBounds.southwest.latitude + " - " + bounds.latLngBounds.northeast.latitude + " - " + bounds.latLngBounds.northeast.longitude + " - " + bounds.latLngBounds.southwest.longitude);
     }
 
@@ -1178,6 +1497,9 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                                         etAttractionDatePicker.setError(null);
                                     }
                                 },mYear, mMonth, mDay);
+
+                                mDatePicker.getDatePicker().setMinDate(mcurrentDate.getTimeInMillis());
+
                                 mDatePicker.setTitle("Select ticket expiration date");
                                 mDatePicker.show();
                             }

@@ -234,7 +234,10 @@ public class EditAttractionListAdapter extends RecyclerView.Adapter<EditAttracti
 
             holder.tvAttractionName.setText(a.getName());
             holder.tvVenueName.setText(a.getVenueName());
-            holder.tvTicketPriceAndNumTickets.setText("$" + MiscHelper.formatDouble(a.getTicketPrice()) + " · " + a.getNumTickets() + " Tickets");
+
+            String requestingOrSelling = (a.getPostType() == 1) ? "Requested" : "Being Sold";
+
+            holder.tvTicketPriceAndNumTickets.setText("$" + MiscHelper.formatDouble(a.getTicketPrice()) + " · " + a.getNumTickets() + " Tickets " + requestingOrSelling);
 
             int color = MiscHelper.getPostColor(this.c, a.getPostType());
             holder.tvTicketPriceAndNumTickets.setTextColor(color);
@@ -250,7 +253,8 @@ public class EditAttractionListAdapter extends RecyclerView.Adapter<EditAttracti
 
                     holder.tvAttractionName.setText(tempEditedAttraction.getName());
                     holder.tvVenueName.setText(tempEditedAttraction.getVenueName());
-                    holder.tvTicketPriceAndNumTickets.setText("$" + MiscHelper.formatDouble(tempEditedAttraction.getTicketPrice()) + " · " + tempEditedAttraction.getNumTickets() + " Tickets");
+                    String requestingOrSelling = (tempEditedAttraction.getPostType() == 1) ? "Requested" : "Being Sold";
+                    holder.tvTicketPriceAndNumTickets.setText("$" + MiscHelper.formatDouble(tempEditedAttraction.getTicketPrice()) + " · " + tempEditedAttraction.getNumTickets() + " Tickets " + requestingOrSelling);
                     int color = MiscHelper.getPostColor(c, tempEditedAttraction.getPostType());
                     holder.tvTicketPriceAndNumTickets.setTextColor(color);
                     try{
@@ -466,6 +470,9 @@ public class EditAttractionListAdapter extends RecyclerView.Adapter<EditAttracti
                         etAttractionDatePicker.setError(null);
                     }
                 },mYear, mMonth, mDay);
+
+                mDatePicker.getDatePicker().setMinDate(mcurrentDate.getTimeInMillis());
+
                 mDatePicker.setTitle("Select ticket expiration date");
                 mDatePicker.show();
             }

@@ -178,13 +178,17 @@ public class BitmapHelper {
             p.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
 
             c.drawBitmap(bitmap, borderWidth, borderWidth, p);
-            p.setXfermode(null);
-            p.setStyle(Paint.Style.STROKE);
-            int color = MiscHelper.getPostColor(this.c, postType);
-            p.setColor(color);
-            p.setStrokeWidth(borderWidth);
+            if(postType == 2){
+                p.setXfermode(null);
+                p.setStyle(Paint.Style.STROKE);
+                int color = MiscHelper.getPostColor(this.c, postType);
+                p.setColor(color);
+                p.setStrokeWidth(borderWidth);
 
-            c.drawCircle((w / 2) + borderWidth, (h / 2) +borderWidth, radius, p);
+
+                c.drawCircle((w / 2) + borderWidth, (h / 2) +borderWidth, radius, p);
+            }
+
             return output;
         }
 

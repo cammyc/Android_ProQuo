@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.scalpr.scalpr.Objects.Attraction;
+import com.scalpr.scalpr.Objects.Filters;
 import com.scalpr.scalpr.Objects.HttpResponseListener;
 import com.scalpr.scalpr.R;
 
@@ -19,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Attr;
 
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -245,7 +247,7 @@ public class AttractionHelper {
         queue.add(sr);
     }
 
-    public void getNewAttractionsRequest(final HttpResponseListener getUpdatedAttractionResponse, final double latBoundLeft, final double latBoundRight, final double lonBoundLeft, final double lonBoundRight, final String searchViewQuery, final String IDs){
+    public void getNewAttractionsRequest(final HttpResponseListener getUpdatedAttractionResponse, final Filters filter, final double latBoundLeft, final double latBoundRight, final double lonBoundLeft, final double lonBoundRight, final String searchViewQuery, final String IDs){
         getUpdatedAttractionResponse.requestStarted();
         StringRequest sr = new StringRequest(Request.Method.POST,"https://scalpr-143904.appspot.com/scalpr_ws/get_new_attractions.php", new Response.Listener<String>() {
             @Override
@@ -275,6 +277,20 @@ public class AttractionHelper {
                 String formattedDate = df.format(c.getTime());
 
                 params.put("currentDate",formattedDate);
+
+                Map<String, String> filters = new HashMap<String, String>();
+                filters.put("startDate", filter.getStartDate());
+                filters.put("endDate", filter.getEndDate());
+                filters.put("requestedTickets", String.valueOf(filter.isShowRequested()));
+                filters.put("sellingTickets", String.valueOf(filter.isShowSelling()));
+                filters.put("minPrice", filter.getMinPrice()+"");
+                filters.put("maxPrice", filter.getMaxPrice()+"");
+                filters.put("numTickets", filter.getNumTickets()+"");
+
+               JSONObject jsonFilters = new JSONObject(filters);
+
+                params.put("jsonFilters", jsonFilters.toString());
+
                 return params;
             }
 
@@ -294,7 +310,7 @@ public class AttractionHelper {
         queue.add(sr);
     }
 
-    public void getInitialAttractionsRequest(final HttpResponseListener getAttractionResponse, final double latBoundLeft, final double latBoundRight, final double lonBoundLeft, final double lonBoundRight){
+    public void getInitialAttractionsRequest(final HttpResponseListener getAttractionResponse, final Filters filter, final double latBoundLeft, final double latBoundRight, final double lonBoundLeft, final double lonBoundRight){
         getAttractionResponse.requestStarted();
         StringRequest sr = new StringRequest(Request.Method.POST,"https://scalpr-143904.appspot.com/scalpr_ws/get_attractions.php", new Response.Listener<String>() {
             @Override
@@ -321,6 +337,20 @@ public class AttractionHelper {
                 String formattedDate = df.format(c.getTime());
 
                 params.put("currentDate",formattedDate);
+
+                Map<String, String> filters = new HashMap<String, String>();
+                filters.put("startDate", filter.getStartDate());
+                filters.put("endDate", filter.getEndDate());
+                filters.put("requestedTickets", String.valueOf(filter.isShowRequested()));
+                filters.put("sellingTickets", String.valueOf(filter.isShowSelling()));
+                filters.put("minPrice", filter.getMinPrice()+"");
+                filters.put("maxPrice", filter.getMaxPrice()+"");
+                filters.put("numTickets", filter.getNumTickets()+"");
+
+                JSONObject jsonFilters = new JSONObject(filters);
+
+                params.put("jsonFilters", jsonFilters.toString());
+
                 return params;
             }
 

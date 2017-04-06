@@ -205,7 +205,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         }else if (id == R.id.nav_contact_us){
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("message/rfc822");
-            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"support@proquoapp.com"});
+            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"support@belivetickets.com"});
             String specs = "";
 
             try {

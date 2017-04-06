@@ -1,68 +1,396 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/slidingUpPanel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:gravity="bottom"
+    sothree:umanoPanelHeight="50dp"
+    sothree:umanoShadowHeight="4dp"
     tools:context="com.scalpr.scalpr.MainActivity">
 
-
-    <fragment
-        android:id="@+id/mainMap"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity" />
+        android:layout_marginBottom="50dp">
 
+
+        <fragment
+            android:id="@+id/mainMap"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="false">
+
+            <ProgressBar
+                android:id="@+id/pbInitialLoader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_my_location"
+                app:backgroundTint="#FFFFFF"
+                android:layout_above="@+id/fab2"
+                android:layout_alignLeft="@+id/fab2"
+                android:layout_alignStart="@+id/fab2"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_attraction_list"
+                app:backgroundTint="#FFFFFF"
+                android:layout_marginTop="8dp"
+                android:layout_above="@+id/fab"
+                android:layout_alignLeft="@+id/fab"
+                android:layout_alignStart="@+id/fab"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_money_white_icon"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
+    </android.support.design.widget.CoordinatorLayout>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/llFilterContainer"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvSlidingPanelDragView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="Filters"
+            android:textStyle="bold"
+            android:textColor="#FFF"
+            android:textSize="20sp"
+            android:background="@color/colorPrimary"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/rounded_green_bg">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:text="Date Range"
+                android:textStyle="bold"
+                android:textColor="#FFF"
+                android:textSize="20sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+
+                <EditText
+                    android:id="@+id/etFilterStartDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/rounded_white_bg"
+                    android:padding="5dp"
+                    android:ems="10"
+                    android:textSize="14sp"
+                    android:focusable="false"
+                    android:gravity="center"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_circled_arrow_right_white"
+                    android:layout_weight="2"/>
+
+
+                <EditText
+                    android:id="@+id/etFilterEndDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@drawable/rounded_white_bg"
+                    android:padding="5dp"
+                    android:text="04/04/2017"
+                    android:ems="10"
+                    android:textSize="14sp"
+                    android:focusable="false"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:text="Show Tickets"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:paddingBottom="5dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_gravity="center">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <CheckBox
+                        android:id="@+id/cbFilterRequested"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Requested"
+                        android:checked="true"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorPrimary"
+                        />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <CheckBox
+                        android:id="@+id/cbFilterBeingSold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Being Sold"
+                        android:checked="true"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorPrimary"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="Price Range"
+            android:textStyle="bold"
+            android:textColor="#FFF"
+            android:background="@drawable/rounded_green_bg"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textSize="20sp"/>
+
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvFilterMinPrice"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/colorPrimary"
+                android:text="$0"/>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_circled_arrow_right"/>
+
+            <TextView
+                android:id="@+id/tvFilterMaxPrice"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/colorPrimary"
+                android:text="$1000"/>
+
+        </LinearLayout>
+
+        <io.apptik.widget.MultiSlider
+            android:id="@+id/rsFilterMinMaxPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            app:range1="@drawable/multislider_primary_mtrl_alpha"
+            app:scaleMin="0"
+            app:scaleMax="1000"
+            />
+
+
+    <LinearLayout
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/etFilterMaxPrice"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:hint="$"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/bFilterSetMax"
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/rounded_green_bg"
+            android:text="Set Max $"
+            android:textColor="#FFF"
+            android:src="@drawable/ic_circled_arrow_right"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="# of Tickets"
+            android:textStyle="bold"
+            android:textColor="#FFF"
+            android:background="@drawable/rounded_green_bg"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textSize="20sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
+        <Spinner
+            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/spinnerNumTickets" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusable="false">
-
-        <ProgressBar
-            android:id="@+id/pbInitialLoader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/llFilterContainer"
+        android:layout_alignParentBottom="true">
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab1"
+            android:id="@+id/fabClearFilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_my_location"
-            app:backgroundTint="#FFFFFF"
-            android:layout_above="@+id/fab2"
-            android:layout_alignLeft="@+id/fab2"
-            android:layout_alignStart="@+id/fab2"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_attraction_list"
-            app:backgroundTint="#FFFFFF"
-            android:layout_marginTop="8dp"
-            android:layout_above="@+id/fab"
-            android:layout_alignLeft="@+id/fab"
-            android:layout_alignStart="@+id/fab"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_money_white_icon"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginRight="8dp"
-
+            android:src="@drawable/ic_action_name"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true" />
+            app:backgroundTint="#FFFFFF"
+            android:layout_alignRight="@+id/llCenter"/>
+
+
+        <LinearLayout
+            android:id="@+id/llCenter"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabCloseFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_down_arrow"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="8dp"
+            app:backgroundTint="#FFFFFF"
+            android:layout_alignLeft="@+id/llCenter"/>
 
     </RelativeLayout>
 
-
-
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

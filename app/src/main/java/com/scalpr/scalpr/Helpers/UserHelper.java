@@ -136,9 +136,12 @@ public class UserHelper {
     public void Logout(){
         SharedPreferences sharedPref = c.getSharedPreferences(c.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         boolean terms = sharedPref.getBoolean("acceptedTerms", false);
+        boolean tutorial = sharedPref.getBoolean("sawCrappyTutorial", false);
+
         SharedPreferences.Editor edit = sharedPref.edit();
         edit.clear();
         edit.putBoolean("acceptedTerms", terms);//don't want to make user re-accept terms
+        edit.putBoolean("sawCrappyTutorial", tutorial);
         edit.commit();
 
         ConversationUpdateService.cancelAll(c);
