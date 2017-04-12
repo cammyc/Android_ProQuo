@@ -235,7 +235,7 @@ public class EditAttractionListAdapter extends RecyclerView.Adapter<EditAttracti
             holder.tvAttractionName.setText(a.getName());
             holder.tvVenueName.setText(a.getVenueName());
 
-            String requestingOrSelling = (a.getPostType() == 1) ? "Requested" : "Being Sold";
+            String requestingOrSelling = (a.getPostType() == 1) ? "Being Sold" : "Requested";
 
             holder.tvTicketPriceAndNumTickets.setText("$" + MiscHelper.formatDouble(a.getTicketPrice()) + " · " + a.getNumTickets() + " Tickets " + requestingOrSelling);
 
@@ -302,7 +302,7 @@ public class EditAttractionListAdapter extends RecyclerView.Adapter<EditAttracti
     private void showDialog(final Attraction a, final HttpResponseListener updateAttractionResponseListener, final int position){
         final Dialog dialog = new Dialog(c);
         dialog.setContentView(R.layout.sell_ticket_dialog);
-        dialog.setTitle("Sell Ticket");
+        //dialog.setTitle("Sell Ticket");
 
         final ImageView ivSelectedMarkerIcon = (ImageView) dialog.findViewById(R.id.ivSelectedImage);
             ivSelectedMarkerIcon.setVisibility(View.VISIBLE);

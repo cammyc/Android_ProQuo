@@ -232,7 +232,7 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
 
             holder.tvAttractionName.setText(a.getName());
             holder.tvVenueName.setText(a.getVenueName());
-            String requestingOrSelling = (a.getPostType() == 1) ? "Requested" : "Being Sold";
+            String requestingOrSelling = (a.getPostType() == 1) ? "Being Sold" : "Requested";
             holder.tvTicketPriceAndNumTickets.setText("$" + MiscHelper.formatDouble(a.getTicketPrice()) + " · " + a.getNumTickets() + " Tickets " + requestingOrSelling);
             
             int color = MiscHelper.getPostColor(this.c, a.getPostType());

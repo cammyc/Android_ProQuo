@@ -12,7 +12,7 @@
         android:height="60dp"
         android:background="@color/colorAccent"
         android:gravity="center"
-        android:text="SELL TICKET"
+        android:text="POST TICKET"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#FFF"
         android:textStyle="bold" />

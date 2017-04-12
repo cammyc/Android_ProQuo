@@ -1310,7 +1310,6 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                         // custom dialog
                         postTicketDialog = new Dialog(context);
                         postTicketDialog.setContentView(R.layout.sell_ticket_dialog);
-                        postTicketDialog.setTitle("Sell Ticket");
 
                         final ImageView ivSelectedMarkerIcon = (ImageView) postTicketDialog.findViewById(R.id.ivSelectedImage);
                         Button dialogButton = (Button) postTicketDialog.findViewById(R.id.bDoneSellTicket);
