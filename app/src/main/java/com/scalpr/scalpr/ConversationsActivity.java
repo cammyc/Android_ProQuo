@@ -480,7 +480,7 @@ public class ConversationsActivity extends AppCompatActivity {
 
                         // set dialog message
                         alertDialogBuilder
-                                .setMessage("An update is required to continue using ProQuo. Please close the app and update it in the Google Play Store.")
+                                .setMessage("An update is required to continue using BeLive. Please close the app and update it in the Google Play Store.")
                                 .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
 
@@ -542,7 +542,7 @@ public class ConversationsActivity extends AppCompatActivity {
 
             // set dialog message
             alertDialogBuilder
-                    .setMessage("You must agree to ProQuo's Terms of Service to continue using the app.")
+                    .setMessage("You must agree to BeLives Terms of Service to continue using the app.")
                     .setNegativeButton("View Terms of Service", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -573,7 +573,7 @@ public class ConversationsActivity extends AppCompatActivity {
             alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.proquoapp.com/help/policies/terms_of_service.html"));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.belivetickets.com/help/policies/terms_of_service.html"));
                     startActivity(browserIntent);
                 }
             });

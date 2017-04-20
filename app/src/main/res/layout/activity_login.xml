@@ -76,7 +76,6 @@
                     android:inputType="textPassword"
                     android:gravity="left"
                     android:maxLines="1" />
-
             </android.support.design.widget.TextInputLayout>
 
             <TextView

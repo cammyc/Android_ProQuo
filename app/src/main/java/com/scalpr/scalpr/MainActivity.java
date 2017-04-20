@@ -568,7 +568,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
 
             // set dialog message
             alertDialogBuilder
-                    .setMessage("You must agree to ProQuo's Terms of Service to continue using the app.")
+                    .setMessage("You must agree to BeLive's Terms of Service to continue using the app.")
                     .setNegativeButton("View Terms of Service", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -625,7 +625,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
             alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.proquoapp.com/help/policies/terms_of_service.html"));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.belivetickets.com/help/policies/terms_of_service.html"));
                     startActivity(browserIntent);
                 }
             });
@@ -680,7 +680,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
 
                        // set dialog message
                        alertDialogBuilder
-                               .setMessage("An update is required to continue using ProQuo. Please close the app and update it in the Google Play Store.")
+                               .setMessage("An update is required to continue using BeLive. Please close the app and update it in the Google Play Store.")
                                .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
                                    public void onClick(DialogInterface dialog, int id) {
 
@@ -946,7 +946,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
     }
 
     private void sendText(String phone){
-        String body = "Hey, I saw your "+selectedAttractionName+" at "+selectedVenueName+" tickets on ProQuo for $" + selectedAttractionPrice + "/Ticket. Are they still for sale?"; // get it from selected contact
+        String body = "Hey, I saw your "+selectedAttractionName+" at "+selectedVenueName+" tickets on BeLive for $" + selectedAttractionPrice + "/Ticket. Are they still for sale?"; // get it from selected contact
         Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( "sms:" + phone ) );
         intent.putExtra( "sms_body", body);
         try {
@@ -960,8 +960,8 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
         i.putExtra(Intent.EXTRA_EMAIL  , new String[]{email});
-        i.putExtra(Intent.EXTRA_SUBJECT, "ProQuo - " + selectedAttractionName + " at " + selectedVenueName + " Tickets");
-        i.putExtra(Intent.EXTRA_TEXT , "Hey, I saw your "+selectedAttractionName+" at "+selectedVenueName+" tickets on ProQuo for $" + selectedAttractionPrice + "/Ticket.\n\nAre they still for sale?");
+        i.putExtra(Intent.EXTRA_SUBJECT, "BeLive - " + selectedAttractionName + " at " + selectedVenueName + " Tickets");
+        i.putExtra(Intent.EXTRA_TEXT , "Hey, I saw your "+selectedAttractionName+" at "+selectedVenueName+" tickets on BeLive for $" + selectedAttractionPrice + "/Ticket.\n\nAre they still for sale?");
         try {
             startActivity(Intent.createChooser(i, "Select your primary email application..."));
         } catch (android.content.ActivityNotFoundException ex) {
