@@ -1,1 +1,1 @@
-include ':app', ':searchview', ':volley', ':glide-3.7.0'
+include ':app'

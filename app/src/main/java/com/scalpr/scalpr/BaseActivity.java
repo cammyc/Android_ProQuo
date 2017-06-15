@@ -345,11 +345,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
             mSearchView.setOnOpenCloseListener(new SearchView.OnOpenCloseListener() {
                 @Override
-                public void onOpen() {
+                public boolean onOpen() {
+                    return true;
                 }
 
                 @Override
-                public void onClose() {
+                public boolean onClose() {
+                    return true;
                 }
             });
 
@@ -380,15 +382,15 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         }
     }
 
-    protected void customSearchView() {
-        final Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mSearchView.setVersion(extras.getInt(EXTRA_KEY_VERSION));
-            mSearchView.setVersionMargins(extras.getInt(EXTRA_KEY_VERSION_MARGINS));
-            mSearchView.setTheme(extras.getInt(EXTRA_KEY_THEME), true);
-            mSearchView.setTextInput(extras.getString(EXTRA_KEY_TEXT));
-        }
-    }
+//    protected void customSearchView() {
+//        final Bundle extras = getIntent().getExtras();
+//        if (extras != null) {
+//            mSearchView.setVersion(extras.getInt(EXTRA_KEY_VERSION));
+//            mSearchView.setVersionMargins(extras.getInt(EXTRA_KEY_VERSION_MARGINS));
+//            mSearchView.setTheme(extras.getInt(EXTRA_KEY_THEME), true);
+//            mSearchView.setTextInput(extras.getString(EXTRA_KEY_TEXT));
+//        }
+//    }
 
     @CallSuper
     protected void getData(String text, int position) {

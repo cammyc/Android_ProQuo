@@ -777,7 +777,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                         TextView textView = (TextView) view.findViewById(R.id.textView_item_text);
                         String query = textView.getText().toString();
                         getData(query, position);
-                        mSearchView.setQuery(query.trim());
+                        mSearchView.setQuery(query.trim(), true);
                         mSearchView.close(false);
                     }
                 });
@@ -818,7 +818,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                         TextView textView = (TextView) view.findViewById(R.id.textView_item_text);
                         String query = textView.getText().toString();
                         getData(query, position);
-                        mSearchView.setQuery(query.trim());
+                        mSearchView.setQuery(query.trim(), true);
                         mSearchView.close(false);
                     }
                 });

@@ -14,12 +14,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.DrawableTypeRequest;
+//import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableResource;
+//import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
+//import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.scalpr.scalpr.Helpers.MiscHelper;
@@ -153,7 +155,9 @@ public class MarkerInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             images.remove(marker); // clean up previous image, it became invalid
             // don't call marker.showInfoWindow() to update because this is most likely called from Glide.into()
         }
-        @Override public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+
+        @Override
+        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
             // this prevents recursion, because Glide load only starts if image == null in getInfoContents
             images.put(marker, resource);
             // tell the maps API it can try to call getInfoContents again, this time finding the loaded image

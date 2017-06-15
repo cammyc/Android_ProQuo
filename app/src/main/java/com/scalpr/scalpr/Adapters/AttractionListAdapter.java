@@ -30,6 +30,9 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+//import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.scalpr.scalpr.EditAttractions;
@@ -149,11 +152,11 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
 
         if(a.getID() != -1){
             try{
-                Glide.with(c).load(a.getImageURL()).asBitmap()
-                        .into(new SimpleTarget<Bitmap>() {
+                Glide.with(c).load(a.getImageURL())
+                        .into(new SimpleTarget<GlideDrawable>() {
                             @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                holder.ivAttractionPic.setImageBitmap(new BitmapHelper(c).getCircleBitmap(resource , holder.ivAttractionPic.getWidth(), holder.ivAttractionPic.getHeight(), a.getPostType()));
+                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                                holder.ivAttractionPic.setImageBitmap(new BitmapHelper(c).getCircleBitmap(((GlideBitmapDrawable) resource).getBitmap() , holder.ivAttractionPic.getWidth(), holder.ivAttractionPic.getHeight(), a.getPostType()));
                             }
                         });
 
