@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +31,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.android.volley.VolleyError;
 import com.facebook.AccessToken;
@@ -72,8 +76,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private Button bLogin, bCreateAccount;
     private LoginButton fbLoginButton;
     private View mProgressView;
-    private View mLoginFormView;
     private UserHelper loginHelp;
+    private VideoView mVideoView;
     Context c;
     String fbFirstName, fbLastName, fbEmail, fbID;
     String googleFirstName, googleLastName, googleEmail, googleDisplayPic, googleID;
@@ -115,12 +119,40 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
+
         bCreateAccount.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptCreateAccount();
+                Intent intent = new Intent(c, CreateAccountActivity.class);
+                startActivity(intent);
             }
         });
+
+        mVideoView = (VideoView) findViewById(R.id.login_background);
+
+        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.login_video);
+
+        mVideoView.setVideoURI(uri);
+        mVideoView.start();
+
+
+        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer){
+                mediaPlayer.setLooping(true);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        mVideoView.start();
+    }
+
+    private void initializeVideo(){
+
     }
 
     private void initializeFB(){
@@ -408,7 +440,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void initializeViews() {
-        mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
         etLoginUN = (EditText) findViewById(R.id.etLoginUN);
@@ -416,14 +447,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         bLogin = (Button) findViewById(R.id.bLogin);
 
-        etFirstName = (EditText) findViewById(R.id.etFirstNameCreateAccount);
+/*        etFirstName = (EditText) findViewById(R.id.etFirstNameCreateAccount);
         etLastName = (EditText) findViewById(R.id.etLastNameCreateAccount);
         etEmailorPhoneInitialCA = (EditText) findViewById(R.id.etEmailOrPhoneInitialCreateAccount);
         etEmailOrPhoneConfirmCA = (EditText) findViewById(R.id.etEmailOrPhoneConfirmCreateAccount);
         etPasswordInitialCA = (EditText) findViewById(R.id.etPasswordCreateAccount);
         etPasswordConfirmCA = (EditText) findViewById(R.id.etPasswordConfirmCreateAccount);
+*/
 
-        bCreateAccount = (Button) findViewById(R.id.bCreateAccount);
+        bCreateAccount = (Button) findViewById(R.id.sign_up_button);
 
         TextView tvForgotPW = (TextView) findViewById(R.id.tvForgotPassword);
 
@@ -440,7 +472,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptCreateAccount(){
+    /*private void attemptCreateAccount(){
         etFirstName.setError(null);
         etLastName.setError(null);
         etEmailorPhoneInitialCA.setError(null);
@@ -512,7 +544,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
 
         loginHelp.CreateAccountRequest(createAccountResponseListener,firstName,lastName,emailPhoneInitial,pwInitial);
-    }
+    }*/
 
 
 

@@ -15,7 +15,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,8 +29,6 @@ import com.scalpr.scalpr.Helpers.Security;
 import com.scalpr.scalpr.Helpers.UserHelper;
 import com.scalpr.scalpr.Objects.HttpResponseListener;
 import com.scalpr.scalpr.Objects.User;
-
-import org.w3c.dom.Text;
 
 
 public abstract class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

@@ -43,6 +43,6 @@
 
     <string name="forgotPWLink">&lt;a href="http://belivetickets.com/forgotPassword.html">Forgot Password?&lt;/a></string>
 
-
+    <string name="sign_up_button">Sign Up</string>
 
 </resources>

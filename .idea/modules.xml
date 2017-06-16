@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Scalpr.iml" filepath="$PROJECT_DIR$/Scalpr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Android_ProQuo.iml" filepath="$PROJECT_DIR$/Android_ProQuo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

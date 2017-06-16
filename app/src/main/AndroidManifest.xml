@@ -70,6 +70,16 @@
                 android:value="com.scalpr.scalpr.MainActivity" />
         </activity>
         <activity
+            android:name=".CreateAccountActivity"
+            android:configChanges="orientation"
+            android:label="Create Account"
+            android:parentActivityName=".LoginActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.scalpr.scalpr.MainActivity"/>
+        </activity>
+        <activity
             android:name=".SetLocationAndPostTicket"
             android:configChanges="orientation"
             android:label="@string/title_activity_main"
