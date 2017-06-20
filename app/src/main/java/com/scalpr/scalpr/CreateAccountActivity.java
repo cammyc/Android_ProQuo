@@ -3,14 +3,18 @@ package com.scalpr.scalpr;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.android.volley.VolleyError;
 import com.scalpr.scalpr.Helpers.UserHelper;
@@ -31,6 +35,7 @@ public class CreateAccountActivity extends AppCompatActivity{
     private UserHelper loginHelp;
     private Context c;
     private View mProgressView;
+    private VideoView mVideoView;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -46,6 +51,22 @@ public class CreateAccountActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 attemptCreateAccount();
+            }
+        });
+
+
+        mVideoView = (VideoView) findViewById(R.id.create_account_background);
+
+        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.login_video);
+
+        mVideoView.setVideoURI(uri);
+        mVideoView.start();
+
+
+        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer){
+                mediaPlayer.setLooping(true);
             }
         });
     }
