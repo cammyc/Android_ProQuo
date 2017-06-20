@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:layout_margin="0dp"
               android:orientation="vertical"
-              android:weightSum="1">
+              android:weightSum="1"
+              android:layout_gravity="center"
+              android:background="#333333">
+
 
     <ProgressBar
         android:id="@+id/login_progress"
@@ -11,102 +15,112 @@
         android:layout_height="wrap_content"
         android:visibility="gone"/>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/login_progress"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="91dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/first_name_edit"
-            android:layout_width="187dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="First Name"
-            android:inputType="text"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/last_name_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="Last Name"
-            android:inputType="textPersonName"/>
+            <EditText
+                android:id="@+id/first_name_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/rounded_edit_text"
+                android:hint="First Name"
+                android:ems="10"
+                android:textColorHint="@color/createAccountHint"
+                android:inputType="textPersonName"/>
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/last_name_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_edit_text"
+                android:ems="10"
+                android:hint="Last Name"
+                android:textColorHint="@color/createAccountHint"
+                android:inputType="textPersonName"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        </LinearLayout>
+
 
         <EditText
             android:id="@+id/email_edit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rounded_edit_text"
             android:ems="10"
             android:hint="Email or Phone #"
+            android:textColorHint="@color/createAccountHint"
             android:inputType="textEmailAddress"/>
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/email_confirm_edit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/rounded_edit_text"
             android:ems="10"
             android:hint="Confirm Email"
-            android:inputType="textEmailAddress"
-            />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            android:textColorHint="@color/createAccountHint"
+            android:inputType="textEmailAddress"/>
 
         <EditText
             android:id="@+id/password_edit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rounded_edit_text"
             android:ems="10"
             android:hint="Password"
-            android:inputType="textPassword"
-            />
-    </RelativeLayout>
+            android:textColorHint="@color/createAccountHint"
+            android:inputType="textPassword"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/password_confirm_edit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Confirm Password"
-            android:inputType="textPassword"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="47dp">
-
-        <Button
-            android:id="@+id/create_account_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_height="45dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:text="Create Account"/>
-    </RelativeLayout>
+            android:layout_alignParentTop="true"
+            android:background="@drawable/rounded_edit_text"
+            android:ems="10"
+            android:hint="Confirm Password"
+            android:textColorHint="@color/createAccountHint"
+            android:inputType="textPassword"/>
 
-</LinearLayout>
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/create_account_button"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#33FFFFFF"
+        android:textColor="#FFFFFF"
+        android:layout_margin="0dp"
+        android:text="Create Account"/>
+
+</RelativeLayout>

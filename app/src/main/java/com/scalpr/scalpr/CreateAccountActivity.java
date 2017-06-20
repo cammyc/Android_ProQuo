@@ -24,6 +24,8 @@ public class CreateAccountActivity extends AppCompatActivity{
 
     HttpResponseListener createAccountResponseListener, loginResponseListener;
 
+    public static final int CREATE_ACCOUNT = 2;
+
     private EditText etFirstName, etLastName, etEmailorPhoneInitialCA, etEmailOrPhoneConfirmCA, etPasswordInitialCA, etPasswordConfirmCA;
     private Button bCreateAccount;
     private UserHelper loginHelp;
@@ -66,6 +68,8 @@ public class CreateAccountActivity extends AppCompatActivity{
                 } else {
                     loginHelp.confirmLoginAndSaveUser(response);
                     Toast.makeText(getApplicationContext(), "Account Successfully Created", Toast.LENGTH_SHORT).show();
+
+                    setResult(CREATE_ACCOUNT);
                     finish();
                 }
             }

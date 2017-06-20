@@ -16,6 +16,9 @@
     <color name="requestTicket">#3498db</color>
     <color name="sellTicket">#2ecc71</color>
 
+    <color name="createAccountHint">#777777</color>
+    <color name="createAccountText">#222222</color>
+
     <!--<color name="colorPrimaryDark">#303F9F</color>-->
     <!--<color name="colorAccent">#FF4081</color>-->
 </resources>

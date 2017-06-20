@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     HttpResponseListener createAccountResponseListener, loginResponseListener, facebookCreateAccountOrLoginResponseListener, googleCreateAccountOrLoginResponseListener;
     public static final int RC_SIGN_IN = 1;
+    public static final int CREATE_ACCOUNT = 2;
     public static final String GOOGLE_LOGIN = "GOOGLE_LOGIN";
     public static final String FB_LOGIN = "FB_LOGIN";
 
@@ -124,7 +125,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(c, CreateAccountActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,CREATE_ACCOUNT);
             }
         });
 
@@ -700,7 +701,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
-        }else{
+        }
+        else if(resultCode == 2){
+            finish();
+        }
+        else{
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }

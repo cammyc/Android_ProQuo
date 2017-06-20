@@ -325,13 +325,16 @@ public class UserHelper {
                         }else{
                             phone = emailPhone;
                         }
-                        jObjectData.put("userID", response);
+                        JSONObject obj = new JSONObject(response);
+                        jObjectData.put("userID", obj.getLong("userID"));
                         jObjectData.put("firstName", firstName);
                         jObjectData.put("lastName", lastName);
                         jObjectData.put("email", email);
                         jObjectData.put("phoneNumber", phone);
                         jObjectData.put("password",password);
-                        jObjectData.put("displayPicURL", "");
+                        jObjectData.put("displayPicURL", obj.getString("displayPicURL"));
+                        jObjectData.put("accessToken", obj.getString("accessToken"));
+
 
                     }catch (Exception ex){
                         Log.d("CREATEACCOUNT_REQUEST", ex.toString());
