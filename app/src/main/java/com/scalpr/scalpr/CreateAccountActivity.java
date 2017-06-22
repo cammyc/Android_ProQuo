@@ -3,6 +3,7 @@ package com.scalpr.scalpr;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -32,6 +34,7 @@ public class CreateAccountActivity extends AppCompatActivity{
 
     public static final int CREATE_ACCOUNT = 2;
 
+    private TextView mBeLiveHeader;
     private EditText etFirstName, etLastName, etEmailorPhoneInitialCA, etEmailOrPhoneConfirmCA, etPasswordInitialCA, etPasswordConfirmCA;
     private Button bCreateAccount;
     private UserHelper loginHelp;
@@ -39,6 +42,7 @@ public class CreateAccountActivity extends AppCompatActivity{
     private View mProgressView;
     private SurfaceView mSurfaceView;
     private MediaPlayer mMediaPlayer;
+    private Typeface mAudioWide;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -49,6 +53,9 @@ public class CreateAccountActivity extends AppCompatActivity{
         initializeViews();
         initializeHttpListeners();
 
+        mAudioWide = Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Audiowide-Regular.ttf");
+        mBeLiveHeader = (TextView) findViewById(R.id.belive_header);
+        mBeLiveHeader.setTypeface(mAudioWide);
 
         bCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
