@@ -12,14 +12,11 @@
                 tools:context="com.scalpr.scalpr.LoginActivity">
 
 
-    <VideoView
+    <SurfaceView
         android:id="@+id/login_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:paddingTop="10dp"/>
     <!-- Login progress -->
     <ProgressBar
         android:id="@+id/login_progress"
@@ -27,6 +24,13 @@
         android:layout_height="wrap_content"
         android:visibility="gone"/>
 
+    <ImageView
+        android:id="@+id/proquogreen"
+        android:scaleType="centerInside"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_above="@+id/email_login_form"/>
 
     <LinearLayout
     android:id="@+id/email_login_form"

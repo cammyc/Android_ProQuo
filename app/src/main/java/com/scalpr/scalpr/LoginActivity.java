@@ -28,6 +28,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,6 +80,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private View mProgressView;
     private UserHelper loginHelp;
     private VideoView mVideoView;
+    
+    private ImageView mImageView;
     Context c;
     String fbFirstName, fbLastName, fbEmail, fbID;
     String googleFirstName, googleLastName, googleEmail, googleDisplayPic, googleID;
@@ -143,6 +146,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 mediaPlayer.setLooping(true);
             }
         });
+
+        mImageView = (ImageView) findViewById(R.id.proquogreen);
+
+        mImageView.setImageResource(R.drawable.proquogreen_nobg);
+
     }
 
     @Override
