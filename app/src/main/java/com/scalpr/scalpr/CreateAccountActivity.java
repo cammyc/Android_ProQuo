@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,7 +37,8 @@ public class CreateAccountActivity extends AppCompatActivity{
     private UserHelper loginHelp;
     private Context c;
     private View mProgressView;
-    private VideoView mVideoView;
+    private SurfaceView mSurfaceView;
+    private MediaPlayer mMediaPlayer;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -55,21 +58,36 @@ public class CreateAccountActivity extends AppCompatActivity{
         });
 
 
-        mVideoView = (VideoView) findViewById(R.id.create_account_background);
+        mSurfaceView = (SurfaceView) findViewById(R.id.create_account_background);
 
-        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.login_video);
-
-        mVideoView.setVideoURI(uri);
-        mVideoView.start();
-
-
-        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
+        mSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback(){
             @Override
-            public void onPrepared(MediaPlayer mediaPlayer){
-                mediaPlayer.setLooping(true);
+            public void surfaceCreated(SurfaceHolder holder){
+                Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.login_video);
+
+                mMediaPlayer = MediaPlayer.create(getApplicationContext(), video, holder);
+
+                mMediaPlayer.setDisplay(holder);
+
+                mMediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+                mMediaPlayer.setLooping(true);
+                mMediaPlayer.setVolume(0,0);
+                mMediaPlayer.start();
+
+            }
+
+
+            @Override
+            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3) {
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
             }
         });
     }
+
+
 
 
     private void initializeHttpListeners() {

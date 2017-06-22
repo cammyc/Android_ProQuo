@@ -15,8 +15,8 @@
     <SurfaceView
         android:id="@+id/login_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"/>
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"/>
     <!-- Login progress -->
     <ProgressBar
         android:id="@+id/login_progress"
@@ -115,8 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="1dp"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/black" />
+                android:background="@android:color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -124,14 +123,15 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:text="OR"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="1dp"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/black" />
+                android:background="@android:color/white" />
 
         </LinearLayout>
 

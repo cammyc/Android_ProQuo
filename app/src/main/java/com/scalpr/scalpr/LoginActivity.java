@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -20,7 +21,10 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -80,7 +84,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private View mProgressView;
     private UserHelper loginHelp;
     private VideoView mVideoView;
-    
+    private SurfaceView mSurfaceView;
+    private MediaPlayer mMediaPlayer;
     private ImageView mImageView;
     Context c;
     String fbFirstName, fbLastName, fbEmail, fbID;
@@ -132,37 +137,44 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-        mVideoView = (VideoView) findViewById(R.id.login_background);
-
-        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.login_video);
-
-        mVideoView.setVideoURI(uri);
-        mVideoView.start();
-
-
-        mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener(){
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer){
-                mediaPlayer.setLooping(true);
-            }
-        });
 
         mImageView = (ImageView) findViewById(R.id.proquogreen);
 
         mImageView.setImageResource(R.drawable.proquogreen_nobg);
 
+        mSurfaceView = (SurfaceView) findViewById(R.id.login_background);
+
+        mSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback(){
+            @Override
+            public void surfaceCreated(SurfaceHolder holder){
+                Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.login_video);
+
+                mMediaPlayer = MediaPlayer.create(getApplicationContext(), video, holder);
+
+                //setVideoSize();
+
+
+                mMediaPlayer.setDisplay(holder);
+
+                mMediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+                mMediaPlayer.setLooping(true);
+                mMediaPlayer.setVolume(0,0);
+                mMediaPlayer.start();
+
+            }
+
+
+            @Override
+            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3) {
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+            }
+        });
+
     }
 
-    @Override
-    protected void onResume(){
-        super.onResume();
-
-        mVideoView.start();
-    }
-
-    private void initializeVideo(){
-
-    }
 
     private void initializeFB(){
 
