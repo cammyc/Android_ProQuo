@@ -38,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.android.volley.ExecutorDelivery;
 import com.android.volley.VolleyError;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -63,6 +64,7 @@ import com.scalpr.scalpr.Objects.HttpResponseListener;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -92,9 +94,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     String googleFirstName, googleLastName, googleEmail, googleDisplayPic, googleID;
     CallbackManager callbackManager;
 
+    Uri video;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+         video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.cropped);
 
         if(!FacebookSdk.isInitialized()){
             FacebookSdk.sdkInitialize(getApplicationContext()); //needs to go before setContentView so can't put in initializeFB()
@@ -147,20 +154,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback(){
             @Override
             public void surfaceCreated(SurfaceHolder holder){
-                Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.login_video);
 
-                mMediaPlayer = MediaPlayer.create(getApplicationContext(), video, holder);
+                if (mMediaPlayer == null) {
 
-                //setVideoSize();
+                    mMediaPlayer = MediaPlayer.create(getApplicationContext(), video, holder);
 
 
-                mMediaPlayer.setDisplay(holder);
+                    mMediaPlayer.setDisplay(holder);
 
-                mMediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
-                mMediaPlayer.setLooping(true);
-                mMediaPlayer.setVolume(0,0);
-                mMediaPlayer.start();
 
+//                mMediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+                    mMediaPlayer.setLooping(true);
+                    mMediaPlayer.setVolume(0, 0);
+                    mMediaPlayer.start();
+
+                }
             }
 
 
@@ -175,6 +183,35 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mMediaPlayer != null){
+            try {
+                mMediaPlayer.stop();
+            }catch (Exception ex){
+
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(mMediaPlayer != null){
+                try {
+//                    mMediaPlayer.reset();
+//                    mMediaPlayer.pause();
+                    mMediaPlayer.reset();
+                    mMediaPlayer.setDataSource(this, video);
+                    mMediaPlayer.prepare();
+                    mMediaPlayer.start();
+                }catch (Exception ex) {
+
+                }
+        }
+    }
 
     private void initializeFB(){
 

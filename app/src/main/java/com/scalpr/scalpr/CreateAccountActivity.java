@@ -44,8 +44,13 @@ public class CreateAccountActivity extends AppCompatActivity{
     private MediaPlayer mMediaPlayer;
     private Typeface mAudioWide;
 
+    Uri video;
+
+
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
+        video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.cropped);
 
         setContentView(R.layout.activity_create_account);
         c=this;
@@ -70,16 +75,18 @@ public class CreateAccountActivity extends AppCompatActivity{
         mSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback(){
             @Override
             public void surfaceCreated(SurfaceHolder holder){
-                Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.login_video);
 
-                mMediaPlayer = MediaPlayer.create(getApplicationContext(), video, holder);
+                if (mMediaPlayer == null) {
 
-                mMediaPlayer.setDisplay(holder);
+                    mMediaPlayer = MediaPlayer.create(getApplicationContext(), video, holder);
 
-                mMediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
-                mMediaPlayer.setLooping(true);
-                mMediaPlayer.setVolume(0,0);
-                mMediaPlayer.start();
+                    mMediaPlayer.setDisplay(holder);
+
+                    mMediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+                    mMediaPlayer.setLooping(true);
+                    mMediaPlayer.setVolume(0, 0);
+                    mMediaPlayer.start();
+                }
 
             }
 
@@ -94,7 +101,35 @@ public class CreateAccountActivity extends AppCompatActivity{
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mMediaPlayer != null){
+            try {
+                mMediaPlayer.stop();
+            }catch (Exception ex){
 
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(mMediaPlayer != null){
+            try {
+//                    mMediaPlayer.reset();
+//                    mMediaPlayer.pause();
+                mMediaPlayer.reset();
+                mMediaPlayer.setDataSource(this, video);
+                mMediaPlayer.prepare();
+                mMediaPlayer.start();
+            }catch (Exception ex) {
+
+            }
+        }
+    }
 
 
     private void initializeHttpListeners() {
