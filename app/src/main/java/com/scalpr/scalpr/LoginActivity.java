@@ -155,8 +155,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void surfaceCreated(SurfaceHolder holder){
 
-                if (mMediaPlayer == null) {
-
+                try {
                     mMediaPlayer = MediaPlayer.create(getApplicationContext(), video, holder);
 
 
@@ -167,8 +166,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     mMediaPlayer.setLooping(true);
                     mMediaPlayer.setVolume(0, 0);
                     mMediaPlayer.start();
+                }catch (Exception ex){
 
                 }
+
             }
 
 
@@ -199,18 +200,19 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onResume() {
         super.onResume();
 
-        if(mMediaPlayer != null){
                 try {
-//                    mMediaPlayer.reset();
+
 //                    mMediaPlayer.pause();
+//                    mMediaPlayer.reset();
                     mMediaPlayer.reset();
                     mMediaPlayer.setDataSource(this, video);
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();
+
+
                 }catch (Exception ex) {
 
                 }
-        }
     }
 
     private void initializeFB(){

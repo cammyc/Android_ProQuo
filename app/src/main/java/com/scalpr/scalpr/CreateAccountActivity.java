@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -76,8 +77,7 @@ public class CreateAccountActivity extends AppCompatActivity{
             @Override
             public void surfaceCreated(SurfaceHolder holder){
 
-                if (mMediaPlayer == null) {
-
+                try {
                     mMediaPlayer = MediaPlayer.create(getApplicationContext(), video, holder);
 
                     mMediaPlayer.setDisplay(holder);
@@ -86,6 +86,8 @@ public class CreateAccountActivity extends AppCompatActivity{
                     mMediaPlayer.setLooping(true);
                     mMediaPlayer.setVolume(0, 0);
                     mMediaPlayer.start();
+                }catch (Exception ex){
+
                 }
 
             }
@@ -108,7 +110,6 @@ public class CreateAccountActivity extends AppCompatActivity{
             try {
                 mMediaPlayer.stop();
             }catch (Exception ex){
-
             }
         }
     }
@@ -195,7 +196,6 @@ public class CreateAccountActivity extends AppCompatActivity{
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
     }
-
 
 
 
