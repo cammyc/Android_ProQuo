@@ -1519,7 +1519,8 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                                 .setCancelable(false)
                                 .setPositiveButton("Login",new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog,int id) {
-                                        Intent intent = new Intent(c, LoginActivity.class);
+                                        //Intent intent = new Intent(c, LoginActivity.class);
+                                        Intent intent = new Intent(c, TutorialViewPagerActivity.class);
                                         startActivity(intent);
                                     }
                                 })
