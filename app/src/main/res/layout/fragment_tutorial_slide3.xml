@@ -13,16 +13,43 @@
         >
         <TextView style="?android:textAppearanceMedium"
                   android:padding="16dp"
-                  android:lineSpacingMultiplier="1.2"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                  android:textAlignment="center"
                   android:text="You can view every ticket that has been loaded on the map in a list"
             />
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
-        <TextView
+            <View
+                android:layout_width="61dp"
+                android:layout_height="61dp"
+                android:background="@drawable/circle_background"
+                android:backgroundTint="#999"
+                />
+
+            <View
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circle_background"
+                android:backgroundTint="@color/white"
+                />
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/ic_attraction_list" />
+
+        </RelativeLayout>
+
+        <TextView style="?android:textAppearanceMedium"
+            android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:text="The button above is in the bottom right corner of the home screen. Tapping it will bring you to a list like the one below"
             />
     </LinearLayout>

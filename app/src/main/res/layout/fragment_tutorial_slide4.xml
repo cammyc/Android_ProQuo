@@ -11,6 +11,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView style="?android:textAppearanceLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:textAlignment="center"
+            android:text="Contact Someone!"
+            android:textColor="@color/white" />
 
         <TextView style="?android:textAppearanceMedium"
                   android:padding="16dp"
@@ -20,7 +27,8 @@
                   android:textAlignment="center"
                   android:text="Tap on a post to learn more" />
 
-        <TextView
+        <TextView style="?android:textAppearanceMedium"
+            android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"

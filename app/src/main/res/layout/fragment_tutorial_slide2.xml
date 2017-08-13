@@ -10,9 +10,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+    <TextView style="?android:textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:text="Filters!"/>
+
     <TextView style="?android:textAppearanceMedium"
               android:padding="16dp"
-              android:lineSpacingMultiplier="1.2"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -20,23 +28,26 @@
         />
 
 
-    <TextView
+    <TextView style="?android:textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:textAlignment="center"
         android:text="The number of tickets you need."/>
 
 
-    <TextView
+    <TextView style="?android:textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:textAlignment="center"
         android:text="And More!"/>
 
 
-    <TextView
+    <TextView style="?android:textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:textAlignment="center"
         android:text="To apply filters tap the button filters button at the bottom of the homepage. It can be seen below."/>
 
@@ -63,25 +74,29 @@
             <View
                 android:layout_width="5dp"
                 android:layout_height="5dp"
-                android:background="#DDD"
+                android:background="@drawable/circle_background"
+                android:backgroundTint="#DDD"
                 android:layout_margin="5dp"
                 />
             <View
                 android:layout_width="5dp"
                 android:layout_height="5dp"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/circle_background"
+                android:backgroundTint="@color/colorPrimary"
                 android:layout_margin="5dp"
                 />
             <View
                 android:layout_width="5dp"
                 android:layout_height="5dp"
-                android:background="#DDD"
+                android:background="@drawable/circle_background"
+                android:backgroundTint="#DDD"
                 android:layout_margin="5dp"
                 />
             <View
                 android:layout_width="5dp"
                 android:layout_height="5dp"
-                android:background="#DDD"
+                android:background="@drawable/circle_background"
+                android:backgroundTint="#DDD"
                 android:layout_margin="5dp"
                 />
         </LinearLayout>

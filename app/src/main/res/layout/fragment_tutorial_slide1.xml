@@ -31,9 +31,11 @@
         <ImageView
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:background="@drawable/circle_background"/>
 
-        <TextView
+        <TextView style="?android:textAppearanceMedium"
+            android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -44,9 +46,11 @@
         <ImageView
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:background="@drawable/circle_background"/>
 
-        <TextView
+        <TextView style="?android:textAppearanceMedium"
+            android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="No border indicates the ticket is being sold."
@@ -76,25 +80,29 @@
             <View
                 android:layout_width="5dp"
                 android:layout_height="5dp"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/circle_background"
+                android:backgroundTint="@color/colorPrimary"
                 android:layout_margin="5dp"
                 />
             <View
                 android:layout_width="5dp"
                 android:layout_height="5dp"
-                android:background="#DDD"
+                android:background="@drawable/circle_background"
+                android:backgroundTint="#DDD"
                 android:layout_margin="5dp"
                 />
             <View
                 android:layout_width="5dp"
                 android:layout_height="5dp"
-                android:background="#DDD"
+                android:background="@drawable/circle_background"
+                android:backgroundTint="#DDD"
                 android:layout_margin="5dp"
                 />
             <View
                 android:layout_width="5dp"
                 android:layout_height="5dp"
-                android:background="#DDD"
+                android:background="@drawable/circle_background"
+                android:backgroundTint="#DDD"
                 android:layout_margin="5dp"
                 />
             </LinearLayout>
