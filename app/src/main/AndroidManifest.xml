@@ -64,7 +64,7 @@
                   android:label="Tutorial"
                   android:parentActivityName=".MainActivity"
                   android:screenOrientation="portrait"
-                  android:theme="@style/AppTheme.NoActionBar"
+                  android:theme="@android:style/Theme.NoTitleBar"
                   android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

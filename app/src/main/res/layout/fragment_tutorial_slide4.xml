@@ -1,14 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- fragment_screen_slide_page.xml -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/tutorial_slide4"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-    <TextView style="?android:textAppearanceMedium"
-              android:padding="16dp"
-              android:lineSpacingMultiplier="1.2"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="4" />
-</ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <TextView style="?android:textAppearanceMedium"
+                  android:padding="16dp"
+                  android:lineSpacingMultiplier="1.2"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textAlignment="center"
+                  android:text="Tap on a post to learn more" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="If you want to contact the buyer or seller, just tap the info window"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#BBB"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontally="true"
+            android:layout_centerVertically="true">
+            <View
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:background="#DDD"
+                android:layout_margin="5dp"
+                />
+            <View
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:background="#DDD"
+                android:layout_margin="5dp"
+                />
+            <View
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:background="#DDD"
+                android:layout_margin="5dp"
+                />
+            <View
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:background="@color/colorPrimary"
+                android:layout_margin="5dp"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
