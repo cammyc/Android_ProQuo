@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- fragment_screen_slide_page.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/tutorial_slide2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:background="#EEE">
 
 
     <LinearLayout
@@ -17,6 +19,7 @@
         android:background="@color/colorPrimary"
         android:textAlignment="center"
         android:textColor="@color/white"
+        android:padding="16dp"
         android:text="Filters!"/>
 
     <TextView style="?android:textAppearanceMedium"
@@ -24,23 +27,89 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
             android:textAlignment="center"
+              android:textColor="#000"
               android:text="With filters you can set a price range."
         />
 
 
-    <TextView style="?android:textAppearanceMedium"
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tutFilterMinPrice"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/colorPrimary"
+                android:text="$0"/>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_circled_arrow_right"/>
+
+            <TextView
+                android:id="@+id/tutFilterMaxPrice"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/colorPrimary"
+                android:text="$1000"/>
+
+        </LinearLayout>
+
+
+        <io.apptik.widget.MultiSlider
+            android:id="@+id/rsFilterMinMaxPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            app:range1="@drawable/multislider_primary_mtrl_alpha"
+            app:scaleMin="0"
+            app:scaleMax="1000"
+            />
+
+
+
+        <TextView style="?android:textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textAlignment="center"
+        android:textColor="#000"
         android:text="The number of tickets you need."/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <Spinner
+                android:layout_height="wrap_content"
+                android:layout_width="120dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/tutorialSpinner" />
+
+        </LinearLayout>
+
 
     <TextView style="?android:textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textAlignment="center"
+        android:textColor="#000"
         android:text="And More!"/>
 
 
@@ -49,56 +118,62 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textAlignment="center"
-        android:text="To apply filters tap the button filters button at the bottom of the homepage. It can be seen below."/>
+        android:textColor="#000"
+        android:text="To apply filters, tap the filters button at the bottom of the homepage. It can be seen below."/>
 
-    </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <View
+            android:id="@+id/tvSlidingPanelDragView"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="#BBB"
-            />
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:background="@color/colorPrimary"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_centerInParent="true"
-            android:layout_centerHorizontally="true"
-            android:layout_centerVertically="true">
-            <View
-                android:layout_width="5dp"
-                android:layout_height="5dp"
-                android:background="@drawable/circle_background"
-                android:backgroundTint="#DDD"
-                android:layout_margin="5dp"
-                />
-            <View
-                android:layout_width="5dp"
-                android:layout_height="5dp"
-                android:background="@drawable/circle_background"
-                android:backgroundTint="@color/colorPrimary"
-                android:layout_margin="5dp"
-                />
-            <View
-                android:layout_width="5dp"
-                android:layout_height="5dp"
-                android:background="@drawable/circle_background"
-                android:backgroundTint="#DDD"
-                android:layout_margin="5dp"
-                />
-            <View
-                android:layout_width="5dp"
-                android:layout_height="5dp"
-                android:background="@drawable/circle_background"
-                android:backgroundTint="#DDD"
-                android:layout_margin="5dp"
-                />
-        </LinearLayout>
-    </RelativeLayout>
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerInParent="true">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8 Posts Found"
+                    android:textStyle="bold"
+                    android:textColor="#FFF"
+                    android:textSize="20sp"
+                    android:padding="5dp"
+                    />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_background"
+                    android:backgroundTint="@color/white"
+                    android:padding="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Filters"
+                    android:textStyle="bold"
+                    android:textColor="#FFF"
+                    android:textSize="20sp"
+                    android:padding="5dp"
+                    />
+
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
+
 </RelativeLayout>

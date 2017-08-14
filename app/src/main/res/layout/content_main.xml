@@ -230,8 +230,8 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_width="match_parent"
             android:gravity="center"
             android:text="Price Range"
             android:textStyle="bold"

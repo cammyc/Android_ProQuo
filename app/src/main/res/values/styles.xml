@@ -10,7 +10,7 @@
     </style>
 
 
-    <style name="AppTheme.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -30,6 +30,10 @@
         <item name="android:textColorSecondaryInverse">#CCC</item>
         <item name="android:background">@color/colorPrimary</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
+    </style>
+
+    <style name="TutorialTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/colorPrimary</item>
     </style>
 
 </resources>

@@ -3,16 +3,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/tutorial_slide1"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent"
+            android:background="#EEE">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
-    <TextView style="?android:textAppearanceMedium"
+    <TextView style="?android:textAppearanceLarge"
               android:padding="16dp"
-              android:lineSpacingMultiplier="1.2"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:text="Welcome!"
@@ -25,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:textAlignment="center"
+                android:textColor="#000"
                 android:text="You can now request tickets!"
             />
 
@@ -39,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:textColor="#000"
             android:text="A blue border indicates the ticket is being requested."
             />
 
@@ -55,56 +57,10 @@
             android:layout_height="wrap_content"
             android:text="No border indicates the ticket is being sold."
             android:textAlignment="center"
+            android:textColor="#000"
             />
 
     </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="#BBB"
-                />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_centerInParent="true"
-                android:layout_centerHorizontally="true"
-                android:layout_centerVertically="true">
-            <View
-                android:layout_width="5dp"
-                android:layout_height="5dp"
-                android:background="@drawable/circle_background"
-                android:backgroundTint="@color/colorPrimary"
-                android:layout_margin="5dp"
-                />
-            <View
-                android:layout_width="5dp"
-                android:layout_height="5dp"
-                android:background="@drawable/circle_background"
-                android:backgroundTint="#DDD"
-                android:layout_margin="5dp"
-                />
-            <View
-                android:layout_width="5dp"
-                android:layout_height="5dp"
-                android:background="@drawable/circle_background"
-                android:backgroundTint="#DDD"
-                android:layout_margin="5dp"
-                />
-            <View
-                android:layout_width="5dp"
-                android:layout_height="5dp"
-                android:background="@drawable/circle_background"
-                android:backgroundTint="#DDD"
-                android:layout_margin="5dp"
-                />
-            </LinearLayout>
-        </RelativeLayout>
     </RelativeLayout>
