@@ -190,14 +190,24 @@
         </LinearLayout>
 
 
-        <TextView style="?android:textAppearanceMedium"
-            android:padding="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="#000"
-            android:text="If you want to contact the buyer or seller, just tap the info window"/>
+            <TextView style="?android:textAppearanceMedium"
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:text="If you want to contact the buyer or seller, just tap the info window"/>
 
+            <Button
+                android:id="@+id/doneTutorial"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:text="Done"
+                android:textColor="@color/white"
+                android:layout_marginRight="10dp"
+                android:background="@color/colorPrimary"
+                />
     </LinearLayout>
 
 

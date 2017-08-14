@@ -63,4 +63,9 @@ public class TutorialViewPagerActivity extends FragmentActivity {
             return NUM_PAGES;
         }
     }
+
+    @Override
+    public void onBackPressed(){
+
+    }
 }

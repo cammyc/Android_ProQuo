@@ -582,6 +582,15 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                     })
                     .setCancelable(false);
 
+
+
+            Intent tutIntent = new Intent(c, TutorialViewPagerActivity.class);
+            startActivity(tutIntent);
+
+            SharedPreferences.Editor sharedPrefs = c.getSharedPreferences(c.getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit();
+            sharedPrefs.putBoolean("sawCrappyTutorial", true);
+            sharedPrefs.commit();
+            /*
             // create alert dialog
             final AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
@@ -628,10 +637,18 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.belivetickets.com/help/policies/terms_of_service.html"));
                     startActivity(browserIntent);
                 }
-            });
+            });*/
         }else{
             if(!sharedPref.getBoolean("sawCrappyTutorial", false)){
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+
+                Intent tutIntent = new Intent(c, TutorialViewPagerActivity.class);
+                startActivity(tutIntent);
+
+                SharedPreferences.Editor sharedPrefs = c.getSharedPreferences(c.getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit();
+                sharedPrefs.putBoolean("sawCrappyTutorial", true);
+                sharedPrefs.commit();
+
+                /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         context);
 
                 // set title
@@ -652,7 +669,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
 
                 // create alert dialog
                 final AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
+                alertDialog.show();*/
             }
 
         }
@@ -1520,7 +1537,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                                 .setPositiveButton("Login",new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog,int id) {
                                         //Intent intent = new Intent(c, LoginActivity.class);
-                                        Intent intent = new Intent(c, TutorialViewPagerActivity.class);
+                                        Intent intent = new Intent(c, LoginActivity.class);
                                         startActivity(intent);
                                     }
                                 })
