@@ -583,13 +583,16 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
                     .setCancelable(false);
 
 
+            if(!sharedPref.getBoolean("sawCrappyTutorial", false)) {
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean("sawCrappyTutorial", true);
+                editor.apply();
 
-            Intent tutIntent = new Intent(c, TutorialViewPagerActivity.class);
-            startActivity(tutIntent);
+                Intent tutIntent = new Intent(c, TutorialViewPagerActivity.class);
+                startActivity(tutIntent);
+            }
 
-            SharedPreferences.Editor sharedPrefs = c.getSharedPreferences(c.getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit();
-            sharedPrefs.putBoolean("sawCrappyTutorial", true);
-            sharedPrefs.commit();
+
             /*
             // create alert dialog
             final AlertDialog alertDialog = alertDialogBuilder.create();
@@ -641,12 +644,14 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback,
         }else{
             if(!sharedPref.getBoolean("sawCrappyTutorial", false)){
 
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean("sawCrappyTutorial", true);
+                editor.apply();
+
                 Intent tutIntent = new Intent(c, TutorialViewPagerActivity.class);
                 startActivity(tutIntent);
 
-                SharedPreferences.Editor sharedPrefs = c.getSharedPreferences(c.getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit();
-                sharedPrefs.putBoolean("sawCrappyTutorial", true);
-                sharedPrefs.commit();
+
 
                 /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         context);
