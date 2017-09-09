@@ -80,13 +80,34 @@
                     android:layout_height="80dp">
 
 
-                    <ImageView
+
+                    <FrameLayout
                         android:id="@+id/ivEditTicketPic"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="5dp" />
+                        android:layout_marginLeft="5dp">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/chance_image"/>
+
+                        <ImageView
+                            android:src="@drawable/image_circle"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"/>
+
+
+                        <ImageView
+                            android:id="@+id/circle_crop1"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/circle_crop"/>
+
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/tvEditAttractionName"
@@ -201,13 +222,29 @@
                     android:layout_height="80dp">
 
 
-                    <ImageView
+                    <FrameLayout
                         android:id="@+id/ivEditTicketPic2"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="5dp" />
+                        android:layout_marginLeft="5dp">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/yankees_image"/>
+
+                        <ImageView
+                            android:id="@+id/circle_crop2"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/circle_crop"/>
+
+                    </FrameLayout>
+
+
 
                     <TextView
                         android:id="@+id/tvEditAttractionName2"

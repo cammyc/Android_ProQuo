@@ -91,12 +91,25 @@
                         android:text="Yankee Stadium"/>
 
 
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginTop="5dp"
-                        android:id="@+id/ivIwImage"
-                        android:layout_gravity="center_horizontal" />
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp">
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/yankees_image"
+                            />
+
+                        <ImageView
+                            android:id="@+id/circle_crop2"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/circle_crop"/>
+
+                    </FrameLayout>
 
 
                     <LinearLayout

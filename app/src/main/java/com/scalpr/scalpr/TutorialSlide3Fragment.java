@@ -4,13 +4,17 @@ package com.scalpr.scalpr;
  * Created by anorris on 2017-08-08.
  */
 
+import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 public class TutorialSlide3Fragment extends Fragment{
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
